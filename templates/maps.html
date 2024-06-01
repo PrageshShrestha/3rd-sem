@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenStreetMap with Lines</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  </head>
+  <body>
+    {% include "navbar.html" %}
+    <style>
+      .mainbody {
+        z-index: 1;
+        background: black;
+      }
+      #map {
+        width: 75vw;
+        height: 85vh;
+        left: 23vw;
+        position: fixed;
+        top: 12vh;
+      }
+      .fixone {
+        width: 60vw;
+        height: 4vh;
+        letter-spacing: 2px;
+        word-spacing: 2px;
+        position: fixed;
+        top: 12vh;
+        color: white;
+        left: 30vw;
+      }
+    </style>
+    <div class="mainbody">
+      <div id="map"></div>
+    </div>
+    <script>
+      // Initialize the map
+
+      var map = L.map("map").setView([27.61931, 85.53857], 16);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+      }).addTo(map);
+    </script>
+    {% if mode == 1 %}
+    <style>
+      #map {
+        transform: scale(0.9);
+        top: 16vh;
+      }
+      #picture_display {
+        display: inline-flex;
+        flex-wrap: wrap;
+        width: 25vw;
+        height: 80vw;
+        justify-content: center;
+        position: fixed;
+        left: 0;
+        top: 0;
+        cursor: pointer;
+        z-index: -1;
+        background: black;
+        padding: 2.5%;
+        color: white;
+        transition: 0.4s;
+      }
+      #picture_display img {
+        width: 10vw;
+        margin-left: 1vw;
+        height: 20vh;
+        transition: 0.4s;
+        border-radius: 10px;
+      }
+      .confirmer {
+        width: 60vw;
+        height: 80vh;
+        z-index: 2;
+        border-radius: 10px;
+        top: 10vh;
+        z-index: -2;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 10px;
+        background: black;
+        position: fixed;
+        left: 20vw;
+        border: 1px inset white;
+      }
+      #conf_pic_dis {
+        width: 90%;
+        height: 60%;
+        display: inline-flex;
+        overflow-x: auto;
+        margin-left: 5%;
+        margin-top: 5vh;
+        background: rgba(40, 40, 40, 0.9);
+        border-radius: 10px;
+      }
+      #conf_pic_dis img {
+        width: 40%;
+        height: 100%;
+        margin-left: 2vw;
+      }
+      .conf {
+        width: 50%;
+        margin-left: 55%;
+        display: inline-flex;
+      }
+      .change_conf:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+      .change_conf {
+        color: black;
+        padding: 10px 45px 10px 45px;
+        background: white;
+        letter-spacing: 0px;
+        font: strong;
+        font: 1rem;
+        align-items: center;
+        float: left;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+
+      .cont_conf:hover {
+        background: rgba(50, 50, 50, 0.8);
+      }
+      .cont_conf {
+        color: white;
+        padding: 10px 35px 10px 35px;
+        background: rgba(50, 50, 50, 0.9);
+        letter-spacing: 0px;
+        font: strong;
+        float: right;
+        font: 1rem;
+        margin-left: 10%;
+        transition: 0.4s;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 10px;
+      }
+    </style>
+    <div class="fixone">
+      Double Click on your area of housing to confirm or click to see pictures!
+    </div>
+    <div id="picture_display"></div>
+    <div class="confirmer">
+      <div id="conf_pic_dis"></div>
+      <br />
+      <div style="font-size: 0.9rem; color: grey; width: 80%; margin-left: 10%">
+        Your clicks helped us estimate the latitude and longitude of your area.
+        These coordinates are theoretical and represent a point within your
+        zone, not your exact location.
+      </div>
+
+      <div style="display: inline-flex">
+        <p class="lat"></p>
+        ,
+        <p class="long"></p>
+      </div>
+      <p style="color: grey; font-size: 1rem">Your zone is identified as :</p>
+      <p style="font-size: 1.9rem" id="zone"></p>
+      <form class="conf" method = POST>
+	  {% csrf_token %}
+        <p class="change_conf">Change</p>
+        <p class="cont_conf">Continue</p>
+      </form>
+    </div>
+    <script>
+      function calculateMidpoint(coordinates) {
+        // Initialize variables for sum of latitudes and longitudes
+        var sumLat = 0;
+        var sumLng = 0;
+
+        // Iterate through each coordinate pair and sum up the latitudes and longitudes
+        coordinates.forEach(function (coord) {
+          sumLat += coord[0];
+          sumLng += coord[1];
+        });
+
+        // Calculate the average latitude and longitude
+        var avgLat = sumLat / coordinates.length;
+        var avgLng = sumLng / coordinates.length;
+
+        // Return the midpoint coordinates as an array
+        return [avgLat, avgLng];
+      }
+      var conf_cont = document.getElementsByClassName("confirmer")[0];
+      var canceller = document.getElementsByClassName("change_conf")[0];
+
+      canceller.addEventListener("click", function () {
+        conf_cont.style.zIndex = -2;
+      });
+
+      var div_to_show = document.getElementById("picutre_display");
+      // Define the coordinates for the line
+      var lineCoordinates1 = [
+        [27.6203, 85.53793],
+        [27.62144, 85.53782],
+        [27.62198, 85.53733],
+        [27.62159, 85.53859],
+        [27.6203, 85.53903],
+        [27.6203, 85.53793],
+      ];
+
+      // Create the line
+      var polyline = L.polygon(lineCoordinates1, { color: "blue" }).addTo(map);
+      polyline.on("mouseover", function (e) {
+        polyline.bindPopup("<img src='' alt='ku gate image'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline.closePopup();
+      });
+      polyline.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 1;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+
+        var mid = calculateMidpoint(lineCoordinates1);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+
+      polyline.on("click", function (e) {
+        var zone = 1;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+
+      var lineCoordinates2 = [
+        [27.62277, 85.53743],
+        [27.62334, 85.53831],
+        [27.62353, 85.5396],
+        [27.62309, 85.54002],
+        [27.62198, 85.53783],
+        [27.62201, 85.53735],
+      ];
+
+      var polyline2 = L.polygon(lineCoordinates2, { color: "orange" }).addTo(
+        map
+      );
+      polyline2.on("mouseover", function (e) {
+        polyline2.bindPopup("<img src='' alt='inner households'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline2.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline2.closePopup();
+      });
+      polyline2.on("click", function (e) {
+        var zone = 2;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        divToShow.style.zIndex = "2";
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+      polyline2.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 2;
+
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates2);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+
+      var lineCoordinates3 = [
+        [27.62188, 85.53803],
+        [27.62255, 85.53913],
+        [27.62202, 85.54018],
+        [27.62183, 85.54122],
+        [27.62106, 85.54113],
+        [27.62081, 85.54068],
+        [27.62082, 85.53921],
+        [27.62159, 85.53859],
+        [27.62188, 85.53803],
+      ];
+      var polyline3 = L.polygon(lineCoordinates3, { color: "green" }).addTo(
+        map
+      );
+      polyline3.on("mouseover", function (e) {
+        polyline3.bindPopup("<img src='' alt='KU road'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline3.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline3.closePopup();
+      });
+      polyline3.on("click", function (e) {
+        var zone = 3;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        divToShow.style.zIndex = "2";
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+      polyline3.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 3;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates3);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+
+      var lineCoordinates4 = [
+        [27.62112, 85.54122],
+        [27.62193, 85.54129],
+        [27.62503, 85.54075],
+        [27.62491, 85.54152],
+        [27.62348, 85.54292],
+        [27.62186, 85.54286],
+        [27.62112, 85.54122],
+      ];
+      var polyline4 = L.polygon(lineCoordinates4, { color: "violet" }).addTo(
+        map
+      );
+      polyline4.on("mouseover", function (e) {
+        polyline4.bindPopup("<img src='' alt='28 kilo road'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline4.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline4.closePopup();
+      });
+      polyline4.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 4;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+      polyline4.on("click", function (e) {
+        var zone = 4;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        divToShow.style.zIndex = "2";
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+
+        var mid = calculateMidpoint(lineCoordinates4);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+
+      var lineCoordinates5 = [
+        [27.62083, 85.54069],
+        [27.62138, 85.54194],
+        [27.6189, 85.54427],
+        [27.61814, 85.54261],
+        [27.61909, 85.54084],
+        [27.62069, 85.54033],
+        [27.62083, 85.54069],
+      ];
+      var polyline5 = L.polygon(lineCoordinates5, { color: "indigo" }).addTo(
+        map
+      );
+      polyline5.on("mouseover", function (e) {
+        polyline5.bindPopup("<img src='' alt='28 kilo road'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline5.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline5.closePopup();
+      });
+      polyline5.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 5;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates5);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+      polyline5.on("click", function (e) {
+        var zone = 5;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        divToShow.style.zIndex = "2";
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+
+      var lineCoordinates6 = [
+        [27.61753, 85.53695],
+        [27.61789, 85.53887],
+        [27.61786, 85.53982],
+        [27.61595, 85.54106],
+        [27.61536, 85.53968],
+        [27.6159, 85.53895],
+        [27.61555, 85.53797],
+        [27.61582, 85.53717],
+        [27.61753, 85.53695],
+      ];
+      var polyline6 = L.polygon(lineCoordinates6, { color: "yellow" }).addTo(
+        map
+      );
+      polyline6.on("mouseover", function (e) {
+        polyline6.bindPopup("<img src='' alt='28 kilo road'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline6.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline6.closePopup();
+      });
+      polyline6.on("click", function (e) {
+        var zone = 6;
+        var count;
+        var divToShow = document.getElementById("picture_display");
+        divToShow.style.zIndex = "2";
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+      });
+
+      var lineCoordinates7 = [
+        [27.61723, 85.53437],
+        [27.61692, 85.53463],
+        [27.6179, 85.53604],
+        [27.61821, 85.53597],
+        [27.61916, 85.53656],
+        [27.62048, 85.53789],
+        [27.6224, 85.5356],
+        [27.62072, 85.53487],
+        [27.6192, 85.53457],
+        [27.61909, 85.53599],
+        [27.61751, 85.53421],
+        [27.61723, 85.53437],
+      ];
+      var polyline7 = L.polygon(lineCoordinates7, { color: "cyan" }).addTo(map);
+      polyline7.on("mouseover", function (e) {
+        polyline7.bindPopup("<img src='' alt='28 kilo road'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline7.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline7.closePopup();
+      });
+
+      var lineCoordinates8 = [
+        [27.62144, 85.53782],
+        [27.62198, 85.53733],
+        [27.62308, 85.53706],
+        [27.62442, 85.53551],
+        [27.6237, 85.535],
+        [27.62269, 85.53554],
+        [27.62048, 85.53789],
+      ];
+      var polyline8 = L.polygon(lineCoordinates8, { color: "Maroon" }).addTo(
+        map
+      );
+      polyline8.on("mouseover", function (e) {
+        polyline8.bindPopup("<img src='' alt='ku-banepa'>").openPopup();
+
+        var taged = document.getElementById("content_generator");
+      });
+      polyline8.on("mouseout", function (e) {
+        var taged = document.getElementById("content_generator");
+        polyline8.closePopup();
+
+        polyline8.on("click", function (e) {
+          var zone = 8;
+          var count;
+          var divToShow = document.getElementById("picture_display");
+          divToShow.style.zIndex = "2";
+          var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+          if (imgToRemove) {
+            divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+          }
+
+          for (count = 1; count < 10; count++) {
+            // Make AJAX request to fetch image URL
+
+            var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+            console.log(url);
+
+            var img = document.createElement("img");
+            img.src = url; // Assuming response contains the image URL
+            img.alt = ""; // Set alt attribute if needed
+            divToShow.appendChild(img);
+          }
+        });
+      });
+
+      polyline6.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 6;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates6);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+      polyline7.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 7;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates7);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+      polyline8.on("dblclick", function (e) {
+        var conf_cont = document.getElementsByClassName("confirmer")[0];
+        conf_cont.style.zIndex = 4;
+        var sup = document.getElementById("picture_display");
+        sup.style.zIndex = -3;
+        var zone = 8;
+        var count;
+        var divToShow = document.getElementById("conf_pic_dis");
+        var imgToRemove = divToShow.querySelector("img"); // Select the first img element inside the container div
+
+        if (imgToRemove) {
+          divToShow.removeChild(imgToRemove); // Remove the selected img element from the container div
+        }
+
+        divToShow.style.zIndex = "2";
+        for (count = 1; count < 10; count++) {
+          // Make AJAX request to fetch image URL
+
+          var url = "/static/images/zone" + zone + "_" + count + ".jpg";
+          console.log(url);
+
+          var img = document.createElement("img");
+          img.src = url; // Assuming response contains the image URL
+          img.alt = ""; // Set alt attribute if needed
+          divToShow.appendChild(img);
+        }
+        var mid = calculateMidpoint(lineCoordinates8);
+        document.getElementsByClassName("lat")[0].innerText = mid[0];
+        document.getElementsByClassName("long")[0].innerText = mid[1];
+        document.getElementById("zone").innerText = "Zone " + zone;
+      });
+      var berlin = document.getElementsByClassName("cont_conf")[0];
+berlin.addEventListener("click", function (e) {
+    e.preventDefault();
+    var lat = parseInt(document.getElementsByClassName("lat")[0].innerText, 10);
+    var longi = parseInt(document.getElementsByClassName("long")[0].innerText, 10);
+    var zone = document.getElementById("zone").innerText;
+    $.ajax({
+        url: '{% url "save_address" %}',
+        method: "POST",
+        data: {
+            "lat": lat,
+            "longi": longi,
+            "zone": zone,
+            "csrfmiddlewaretoken": "{{csrf_token}}",
+        },
+        success: function(response) {
+            var url = "{% url 'homepage' %}";
+            window.location.href = url;
+        },
+    });
+});
+
+    </script>
+
+    {% endif %}
+  </body>
+</html>

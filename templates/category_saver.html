@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Saver</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #121212;
+            color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            background-color: #333333;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        input[type="text"]::placeholder {
+            color: #B3B3B3;
+        }
+        button {
+            background-color: #1DB954;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1AA34A;
+        }
+        #message {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Category Saver</h1>
+        <form id="categoryForm">
+            {% csrf_token %}
+            <label for="category_name">Category Name:</label>
+            <input type="text" id="category_name" name="category_name" placeholder="Enter category name" required>
+            
+            <label for="sub_category">Sub Category:</label>
+            <input type="text" id="sub_category" name="sub_category" placeholder="Enter sub category (optional)">
+            
+            <label for="item_name">Item Name:</label>
+            <input type="text" id="item_name" name="item_name" placeholder="Enter item name" required>
+            
+            <button type="submit">Save</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $('#categoryForm').on('submit', function(event){
+                event.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '',  // URL for the AJAX request, leave empty for the same view
+                    data: {
+                        category_name: $('#category_name').val(),
+                        sub_category: $('#sub_category').val(),
+                        item_name: $('#item_name').val(),
+                        csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response){
+                        if(response.done) {
+                            $('#message').html('<p>Category saved successfully!</p>');
+                        } else {
+                            $('#message').html('<p>There was an error saving the category.</p>');
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        $('#message').html('<p>There was an error saving the category.</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

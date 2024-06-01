@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khojauhub</title>
+  
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color:black;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+     .main-container {
+      left: 20vw;
+      position:fixed;
+	  top:12vh;
+      width:80vw;
+	  height:88vh;
+
+	  }
+    .spotify-playlists {
+      padding: 20px 40px;
+    }
+    .spotify-playlists h2 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .spotify-playlists .list {
+      display: flex;
+      gap: 20px;
+      overflow: hidden;
+    }
+    .spotify-playlists .list .item {
+      min-width: 140px;
+      width: 160px;
+      padding: 15px;
+      background-color: #181818;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all ease 0.4s;
+    }
+    .spotify-playlists .list .item:hover {
+      background-color: #252525;
+    }
+    .spotify-playlists .list .item img {
+      width: 100%;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .spotify-playlists .list .item .play {
+      position: relative;
+    }
+    .spotify-playlists .list .item .play .fa {
+      position: absolute;
+      right: 10px;
+      top: -60px;
+      padding: 18px;
+      background-color: #1db954;
+      border-radius: 100%;
+      opacity: 0;
+      transition: all ease 0.4s;
+    }
+    .spotify-playlists .list .item:hover .play .fa {
+      opacity: 1;
+      transform: translateY(-20px);
+    }
+    .spotify-playlists .list .item h4 {
+      color: #ffffff;
+      font-size: 1rem;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .spotify-playlists .list .item p {
+      color: #989898;
+      font-size: .9rem;
+      line-height: 20px;
+      font-weight: 600;
+    }
+    .spotify-playlists hr {
+      margin: 70px 0px 0px;
+      border-color: #636363;
+    }
+
+    .preview {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to right, #ae2896, #509bf5);
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .preview h6 {
+      color: #ffffff;
+      text-transform: uppercase;
+      font-weight: 400;
+      font-size: .9rem;
+      margin-bottom: 10px;
+    }
+    .preview p {
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    .preview button {
+      background-color: #ffffff;
+      color: #000000;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 14px 30px;
+      border: 0px;
+      border-radius: 40px;
+      cursor: pointer;
+    }
+	
+  </style>
+</head>
+<body>
+{% include "navbar.html" %}
+ 
+  <div class="main-container">
+    
+
+    <div class="spotify-playlists">
+      <h2>KU foodlist</h2>
+
+      <div class="list">
+        <div class="item">
+          <img src="cmomo.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>C momo is the best you can get</p>
+        </div>
+
+	<div class="list">
+        <div class="item">
+          <img src="sekuwa.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+
+
+        <!-- other foodlist items here -->
+
+      </div>
+    </div>
+
+    <div class="spotify-playlists">
+      <h2>KU stationery list</h2>
+      <div class="list">
+        <!-- focus playlists items here -->
+      </div>
+    </div>
+<div class="list">
+        <div class="item">
+          <img src="stationery.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+<div class="list">
+        <div class="item">
+          <img src="stationery.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+
+
+    <div class="spotify-playlists">
+      <h2>KU Game house list</h2>
+      <div class="list">
+        <!-- mood playlists items here -->
+      </div>
+      <hr>
+    </div>
+<div class="list">
+        <div class="item">
+          <img src="futsal.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>Enjoy and win!</p>
+        </div>
+<div class="list">
+        <div class="item">
+          <img src="pool.jpg" />
+          <div class="play">
+            <span class="fa fa-play"></span>
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+
+
+
+</body>
+</html>

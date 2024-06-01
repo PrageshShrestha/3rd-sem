@@ -1,0 +1,119 @@
+{% include "navbar.html" %}
+{% load static %}
+<style>
+#search_input{
+
+width:40vw;
+height:8vh;
+border-radius:20px;
+padding:20px;
+outline:none;
+color:white;
+border:3px solid white;
+
+padding-left:50px;
+background:none;
+}
+.search_div{
+display:inline-flex;
+position:fixed;
+z-index:3;
+left:28vw;
+top:1vh;
+}
+.icon_st{
+margin-right:-35px;
+color:white;
+margin-top:3vh;
+z-index:4;
+transform:scale(1);
+}
+.container_mb{
+width:100%;
+height:100%;
+display:flex;
+
+}
+
+</style>
+<form class="search_div">{% csrf_token %}
+<div class="icon_st"><i class="fa-solid fa-magnifying-glass"></i></div>
+<input type="text" placeholder = "What are you looking for......" name="search_item" id="search_input">
+
+
+</form>
+<script>
+var searchInput = document.getElementById("search_input");
+searchInput.addEventListener("input", function(e) {
+    e.preventDefault();
+	var container_prod = document.getElementsByClassName("container_mb")[0];
+container_prod.innerHTML = "";
+    var inputValue = event.target.value;
+    $.ajax({
+	url:"{% url 'searchbar' %}",
+    method:"POST",	
+	data:{
+	"csrfmiddlewaretoken":"{{csrf_token}}",
+	"query_string":inputValue,
+	
+	},
+	success: function(response) {
+    var lengthed = response.prod.length;
+    var container_prod = document.getElementsByClassName("container_mb")[0];
+
+    for (var i = 0; i < lengthed; i++) {
+        // Extract product details
+        var token = response.prod[i][0];
+        var productName = response.prod[i][1];
+        var views = response.prod[i][2];
+        var imageUrl = response.prod[i][3];
+
+        // Create a new 'a' element
+        var aTag = document.createElement('a');
+        aTag.className = 'prod';
+        aTag.href = '#';  // Update this if you have a URL to link to
+
+        // Create a new 'img' element
+        var imgTag = document.createElement('img');
+        imgTag.src = imageUrl;
+        imgTag.alt = productName;  // Optional: Adding alt text
+
+        // Create a new 'p' element
+        var pTag = document.createElement('p');
+        pTag.textContent = productName;
+
+        // Append 'img' and 'p' to the 'a' element
+        aTag.appendChild(imgTag);
+        aTag.appendChild(pTag);
+
+        // Append 'a' to the container
+        container_prod.appendChild(aTag);
+    }
+},
+
+	
+	
+});
+
+});
+</script>
+
+
+
+<div class="mainbody">
+<p style="font-size:1.4rem;">Search</p>
+{{data}}
+<div class="container_mb">
+
+
+
+</div>
+
+
+
+
+
+
+
+
+</div>

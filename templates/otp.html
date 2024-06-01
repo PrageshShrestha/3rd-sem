@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        input[type="text"] {
+            width: 5vw;
+			align-items:center;
+			text-align:center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enter OTP</h2>
+        <input type="text" class="otpInput" placeholder="X" maxlength="1">
+        <input type="text" class="otpInput" placeholder="X" maxlength="1">
+        <input type="text" class="otpInput" placeholder="X" maxlength="1">
+        <input type="text" class="otpInput" placeholder="X" maxlength="1">
+        <button onclick="verifyOTP()">Verify</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        function verifyOTP() {
+            var otpInputs = document.getElementsByClassName('otpInput');
+            var otpValues = "";
+            
+            // Extract OTP values from input fields
+            for (var i = 0; i < otpInputs.length; i++) {
+                otpValues+=otpInputs[i].value;
+            }
+            otpValues2 = parseInt(otpValues);
+            var real_otp = {{otp}};
+			console.log(real_otp , otpValues2);
+			if (real_otp == otpValues2){
+			
+            var isVerified = true; 
+            }
+            if (isVerified) {
+				
+      
+    var url = '{% url "actual" %}';
+    
+    window.location.href = url;
+
+
+            } else {
+                document.getElementById('message').innerHTML = 'Invalid OTP, please try again';
+            }
+        }
+
+        // Add event listeners to input fields
+        var otpInputs = document.getElementsByClassName('otpInput');
+        for (var i = 0; i < otpInputs.length; i++) {
+            otpInputs[i].addEventListener('input', function() {
+                // If the current input box is filled, focus on the next input box
+                if (this.value.length === 1) {
+                    var nextInput = this.nextElementSibling;
+                    if (nextInput !== null) {
+                        nextInput.focus();
+                    }
+                }
+
+                // If all input boxes are filled, call the verifyOTP function
+                var allFilled = true;
+                for (var j = 0; j < otpInputs.length; j++) {
+                    if (otpInputs[j].value === '') {
+                        allFilled = false;
+                        break;
+                    }
+                }
+                if (allFilled) {
+                    verifyOTP();
+                }
+            });
+        }
+    </script>
+</body>
+</html>

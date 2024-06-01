@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <title>Create Account</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+</head>
+<body style="background-color:rgb(9,9,9);">
+   
+        <form method="POST" id="signup_form">
+		{% csrf_token %}
+            <p style="font-size:2rem;">Create Account
+           For Khojauhub</p>
+
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required><br><br>
+
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required><br><br>
+
+           
+            <button onsubmit="submitForm()">Create an account</button> 
+			<br><br><br><br>
+			
+        <a class="fp" href="{% url 'login' %}">Already a user? Login</a>
+    </div>
+
+       </form>
+    
+   
+    </body>
+	<script>
+	 $("#signup_form").on("submit" , function(e){
+	 e.preventDefault();
+	
+        // Get form elements
+        var username = document.getElementById('username').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var password = document.getElementById('password').value.trim();
+
+        // Perform form validation
+        if (username === '' || email === '' || password === '') {
+            alert('All fields are required');
+            return;
+        }
+	
+	
+	$.ajax({
+	type: 'POST',
+      url: "{%url 'signup' %}",
+	  data:{
+	  
+	  "username":username,
+	  "email":email,
+	  "password":password,
+	  
+	  'csrfmiddlewaretoken': '{{csrf_token}}',
+
+	  },
+	  success : function(response){
+	  
+	  console.log(username ,email,password);
+	  console.log(response.already);
+	   if (response.already == 'admin') {
+                        var perurl = '{% url "adminpanel" %}';
+                        window.location.href = perurl;
+                    } else if (response.already == 'true_otp') {
+                        
+                        var url = '{% url "otp" email_receiver="__email__" %}';
+                        url = url.replace('__email__', email.toString());
+                        window.location.href = url;
+                    } else if (response.already == 'True') {
+                        $('.invalid_password').show();
+                    } else if (response.already == 'wrong') {
+                        $('.wrong_password').show();
+                    }
+	  
+	  
+	  },
+	   error: function(xhr, errmsg, err) {
+        console.log(xhr.status + ': ' + xhr.responseText);
+      }
+	  });
+	});
+	
+	</script>
+</html>
+
+<style>
+#signup_form{
+width:40vw;
+height:70vh;
+font-family:sans-serif;
+margin-left:25vw;
+background:rgb(18,18,18);
+color:white;
+margin-top:5vh;
+padding:5vw;
+text-align:center;
+
+
+}
+.fp{
+color:white;align-items:center;text-align:center;margin-left:0vw;margin-top:5vh;
+font-size:1rem;
+}
+.fp:hover{
+color:rgb(0,225,0);
+
+}
+button{
+width:27vw;
+padding:10px 20px;
+border:none;
+outline:none;
+background:rgb(30,215,96);
+border-radius:20px;
+margin-top:5vh;
+cursor:pointer;
+font-weight:strong;
+
+}
+.sig{
+width:40vw;
+text-align:center;
+align-items:center;
+padding-top:3vh;
+margin-top:5vh;
+border-top:.5px solid grey;
+
+}
+button:hover{
+transform:scale(1.1);
+
+}
+label{
+font-size:.9rem;
+
+
+}
+input{
+background:black;
+border:none;
+color:white;
+font-size:1rem;
+outline:none;
+border:2px solid rgba(255,255,255,0.8);
+width:25vw;
+padding:5px 10px;
+height:4vh;
+border-radius:5px;
+border-color:rgba(255,255,255,0.6);
+
+
+}
+input:hover{
+
+border-color:rgba(255,255,255,0.8);
+
+
+
+}
+
+
+</style>

@@ -1,0 +1,62 @@
+{% include "navbar.html" %}
+<style>
+#form_factor{
+width:100%;
+display:inline-flex;
+margin-top:4vh;
+
+}
+#form_factor a{
+padding:10px 20px ;
+background:rgba(50,50,50,0.4);
+border-radius:10px;
+color:white;
+font-size:.9rem;
+text-decoration:none;
+margin-left:4vw;
+transition:.5s;
+}
+#form_factor a:hover{
+background:rgba(50,50,50,0.8);
+
+}
+
+
+
+
+
+</style>
+
+<div class="mainbody">
+<p style="font-size:1.4rem;">Recommendations</p>
+<div id="form_factor">
+{% if category == "All" %}
+<a href = "{% url 'recommendations' 'All' %}" style="background:white;color:black;">All</a>
+
+{% else %}
+<a href = "{% url 'recommendations' 'All' %}">All</a>
+
+
+{% endif %}
+{% for cates in cate %}
+{% if category == cates.name %}
+<a href = "{% url 'recommendations' cates.name%}" style="background:white;color:black;">{{cates.name}}</a> 
+
+{% else %}
+<a href = "{% url 'recommendations' cates.name%}">{{cates.name}}</a>
+{% endif %}
+
+{% endfor %}
+</div>
+
+this is:
+{% for products in data4 %}
+
+name is : {{products.product_name}}<br>
+
+
+
+{% endfor %}
+
+
+</div>

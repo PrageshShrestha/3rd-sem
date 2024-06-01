@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+{% include "navbar.html" %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Myhistory</title>
+
+</head>
+<body>
+  <div class="mainbody">
+  <p style="font-size:1.4rem;">History</p>
+  <p style="color:grey;font-size:.9rem;">{{user_id.email}}</p>
+  <br>
+  <div class="history_body">
+  {% for history in histories %}
+  <div class="hist">
+  <img src="{{history.product.picture.url}}" alt = "{{history.product.product_name}}" class="img_busi">
+  <div>
+  <div style="display:inline-flex;"><a>{{history.product.product_name}}</a>  <a style="font-size:0.8rem;text-decoration:none;color:white;margin-left:2vw;">{{history.business.name}}</a></div> <br>
+  <div style="display:inline-flex;color:grey;font-size:.8rem;">{{history.category}} . {{history.sub_category}} . {{history.item_name}} </div>
+  <div>{{history.time}}</div>
+  </div>
+  </div>
+  
+  
+  {% endfor %}
+  </div>
+  
+  
+  </div>
+  
+
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</body>
+
+
+</html>
+<style>
+.history_body{
+width:55vw;
+height:100%;
+overflow-y:scroll;
+cursor:pointer;
+
+
+}
+.hist{
+width:50vw;
+padding:20px;
+margin-top:2vh;
+border-radius:10px;
+ background-color:rgba(80,80,80,0.2);
+transition:.2s;
+
+}
+.hist:hover{
+background-color:rgba(80,80,80,0.4);
+
+}
+
+
+</style>

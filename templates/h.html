@@ -1,0 +1,782 @@
+<html>
+
+<head>
+    <title>Page title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+    }
+
+    .bt-1 {
+        width: 60vw;
+        height: 40vh;
+        margin: 2vw;
+        padding: 1vw;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .ac.a {
+        width: 98%;
+        height: 80%;
+        display: flex;
+    }
+
+    .img_class {
+
+        width: 30%;
+        height: 100%;
+        background: red;
+        margin-right: 1vw;
+
+
+
+    }
+
+    .img_class img {
+        width: 100%;
+        height: 100%;
+
+    }
+
+    .info {
+        width: 68%;
+        height: 100%;
+    }
+
+    .info-top {
+        display: inline-flex;
+        width: 100%;
+        height: 20%;
+
+
+    }
+
+    .name-top {
+        width: 70%;
+
+
+
+    }
+
+    .icon-top {
+
+        width: 30%;
+
+
+    }
+
+    .info-bottom {
+        height: 80%;
+        width: 100%;
+        display: inline-flex;
+
+    }
+
+    .ac.b {
+        padding-top: 2vh;
+
+        height: 20%;
+        width: 100%;
+        display: inline-flex;
+    }
+
+    .key1 {
+        font-size: .9rem;
+        color: grey;
+
+
+    }
+
+    .value1 {
+        font-size: 1.2rem;
+        color: black;
+        letter-spacing: 1px;
+
+    }
+
+    .acb {
+        width: 32%;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+
+    }
+
+    .bt-2 {
+
+        width: 60vw;
+        height: 20vh;
+        margin: 2vw;
+        margin-top: 4vh;
+        padding: 1vw;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    }
+
+    .absolute-class {
+        position: fixed;
+        width: 32vw;
+        height: 100vh;
+        left: 65vw;
+        top: 3vh;
+        overflow-y: scroll;
+
+    }
+
+    .of-div {
+        width: 100%;
+        font: 1rem;
+        align-items: left;
+        display: inline-flex;
+        margin: 2vw;
+
+    }
+
+    .sliding-container {
+        width: 4vw;
+        margin-right: 1vw;
+        height: 2vw;
+        background: #9ea9e4;
+        border-radius: 2vh;
+        transition: 1s;
+        cursor: pointer;
+
+    }
+
+    .slider {
+        width: 2vw;
+        background-color: grey;
+        height: 2vw;
+        border-radius: 50%;
+        transition: 1s;
+    }
+
+    .contact-bt {
+
+        height: 10vw;
+        width: 100%;
+        padding: 2vw;
+
+    }
+
+    .info_ele {
+        display: inline-flex;
+        margin-top: 10px;
+        font: .8rem;
+
+    }
+
+    .key {
+        margin-right: 2vw;
+        color: grey;
+        font-size: .9rem;
+    }
+
+    .comment-bt {
+        height: 30vw;
+        width: 100%;
+        padding: 2vw;
+
+
+
+    }
+
+    #menu_type {
+        width: 100%;
+        display: flex;
+        flex-flow: row wrap;
+        align-content: space-between;
+        justify-content: space-between;
+    }
+
+    #menu_type a {
+
+        text-decoration: none;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-radius: blue;
+        border-radius: 5px;
+        color: white;
+        margin-left: 4px;
+        margin-top: 8px;
+        background: blue;
+        transition: .2s;
+    }
+
+    #menu_type a:hover {
+        transform: scale(1.05);
+
+    }
+
+    .comment_sample {
+        width: 90%;
+        padding: 1vw;
+        margin-top: 1vh;
+        box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+
+    }
+
+    .cmt_first {
+        width: 100%;
+        display: inline-flex;
+        padding-left: 2vw;
+
+
+    }
+
+    .cmt_content {
+        margin-left: 2vw;
+        font-size: .9rem;
+        color: grey;
+        margin-top: .6vh;
+
+    }
+
+    .lr {
+        width: 20%;
+        display: inline-flex;
+
+
+    }
+
+    .like {
+        margin-right: 1vw;
+
+    }
+
+    .nacm {
+        width: 80%;
+
+    }
+
+    .edit {
+        width: 50vw;
+        position: fixed;
+        padding: 2vw;
+        overflow-y: auto;
+        height: 80vh;
+        top: 5vh;
+        left: 25vw;
+        background: white;
+        visibility: hidden;
+        border-radius: 5%;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+    }
+
+    .edit p {
+        margin-left: 1vw;
+        padding-top: 1vw;
+        padding-bottom: 1vw;
+        font-size: 1.1rem;
+        margin-top: 1vw;
+        width: 44vw;
+        align-items: center;
+        text-align: center;
+        background: rgb(225, 225, 238);
+        transition: .2s;
+        cursor: pointer;
+    }
+
+    .edit p:hover {
+
+        background: rgb(194, 194, 216);
+    }
+
+    .addition {
+
+        margin-left: 1vw;
+        padding-top: 1vw;
+        padding-bottom: 1vw;
+        font-size: 1.1rem;
+        margin-top: 1vw;
+        width: 44vw;
+        align-items: center;
+        text-align: center;
+        background: rgb(112, 221, 112);
+        transition: .2s;
+        cursor: pointer;
+
+    }
+
+    .addition:hover {
+
+        background: rgb(65, 216, 65);
+
+
+    }
+
+    .search_menu {
+        width: 44vw;
+        padding: 1vw;
+        border: none;
+        outline: none;
+        background: rgb(224, 221, 221);
+        border-radius: 20px;
+        margin-left: 1vw;
+        padding-left: 2vw;
+        margin-top: 1vw;
+        font: 1rem;
+
+
+    }
+
+
+    @media only screen and (max-width: 946px){
+body{
+letter-spacing:1px;
+word-spacing:1px;
+
+
+}
+
+.absolute-class{
+position:fixed;
+    top:50vh;
+    width:94vw;
+    left:3vw;
+}
+.bt-1{
+width:94vw;
+height:25vh;
+}
+.ac.a{
+
+height:20vh;
+
+}
+.info_ele{
+margin-top:2vh;
+
+
+}
+.bt-2{
+width:75vw;
+height:10vh;
+padding:10vw;
+padding-top:2vw;
+padding-bottom:4vh;
+overflow-y:scroll;
+
+
+}
+.comments-bt{
+margin-top:5vh;
+align-items:center;
+}
+.contact-bt{
+width:80vw;
+text-align:center;
+}
+
+
+.of-div {
+        width: 70%;
+        font: 2rem;
+        align-items: left;
+        display: inline-flex;
+        align-items:center;
+        text-align:center;
+        margin: 2vw;
+        padding-left:25%;
+
+    }
+
+.comment_sample{
+
+width:96%;
+
+}
+
+
+
+
+
+    }
+</style>
+
+<body>
+    <div class="bt-1">
+        <div class="ac a">
+            <div class="img_class">
+
+                <img src="" alt="no found">
+
+            </div>
+
+            <div class="info">
+                <div class="info-top">
+                    <div class="name-top">
+                        <p style="font-size:1.2rem;">Saurav Bhujel dhan de wala</p>
+                        <div style="display:inline-flex;">
+                            <p>Dandha karta hai bsdk</p>
+                            <p style="margin-left:2vw;font-size:.8rem;color:grey;">12pm-1am</p>
+                        </div>
+
+
+                    </div>
+                    <div class="icon-top">
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-bottom">
+                    <div class="f-ib">
+                        <div class="info_ele">
+                            <p class="key">Location</p>
+                            <p class="value">Munni ka kotha</p>
+                        </div>
+                        <div class="info_ele">
+                            <p class="key">Website</p>
+                            <p class="value">aangutha_chap.com</p>
+                        </div>
+                        <div class="info_ele">
+                            <p class="key">Email</p>
+                            <p class="value">bhujelsaurav2003@gmail.com</p>
+                        </div><br>
+                        <div class="info_ele">
+                            <p class="key">Since</p>
+                            <p class="value">1998</p>
+                        </div>
+
+
+                    </div>
+                    <div class="s-ib">
+                        <div class="info_ele">
+                            <p class="key">Rating</p>
+                            <p class="value">1</p>
+                        </div><br>
+                        <div class="info_ele">
+                            <p class="key">Views</p>
+                            <p class="value">1</p>
+                        </div>
+                        <div class="info_ele">
+                            <p class="key">Joined</p>
+                            <p class="value">2015</p>
+                        </div>
+                        <div class="info_ele">
+                            <p class="key">Owner</p>
+                            <p class="value">Saurav Bhujel</p>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ac b">
+
+            <div class="acb a">
+                <p class="value1">69</p>
+                <p class="key1">Listed products</p>
+
+
+            </div>
+            <div class="acb b">
+
+                <p class="value1">69</p>
+                <p class="key1">Total likes</p>
+
+            </div>
+            <div class="acb c">
+
+                <p class="value1">96</p>
+                <p class="key1">Comments</p>
+
+            </div>
+        </div>
+    </div>
+    <div class="bt-2">
+
+        <div class="content-bt-2">
+            <div style="display:inline-flex;width:100%;">
+                <p style="font-size:1.2rem;">Menu</p>
+                <p style="font-size:.9rem;color:grey;">(29)</p>
+                <p id="menu_editor" style="margin-left:85%;color:blue;text-decoration:underline;cursor:pointer;">Edit
+                </p>
+            </div>
+            <div id="menu_type">
+
+
+
+            </div>
+
+
+
+
+        </div>
+
+
+    </div>
+
+    <div class="absolute-class">
+        <div class="of-div">
+            <div class="sliding-container">
+                <div class="slider">
+
+                </div>
+            </div>
+            <p style="text-align:center;margin-top:.5vh;">Make profile public to all Viewers</p>
+        </div>
+
+        <div class="contact-bt">
+            Contact<br>
+            <div style="margin-left:2vw;font-size:.9rem;color:grey;">
+                9845033398<br>
+                saurav_bhujel_official<br>
+                hornpub_saurav<br>
+                onlyfans/saurav_bhujel<br>
+                <i class="fa-brands fa-facebook"></i> raat_k_maje_hi_maje_fan_club<br>
+                aapanga_sansthan_head<br>
+                9888888888
+            </div>
+
+        </div>
+
+
+        <div class="comments-bt">
+            Comments<br>
+            <div class="comment_sample">
+                <div class="cmt_first">
+                    <div class="nacm">
+                        <p>Suyog Sapkota</p>
+                        <p style="font-size:.8rem;color:grey;">1 day ago</p>
+                    </div>
+                    <div class="lr">
+                        <div class="like"><i class="fa-regular fa-heart"></i></div>
+                        <div class="remove"><i class="fa-solid fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="cmt_content">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
+                    fuga. Et harum quidem rerum facilis est et expedita distinctio.
+
+                </div>
+            </div>
+            <div class="comment_sample">
+                <div class="cmt_first">
+                    <div class="nacm">
+                        <p>Suyog Sapkota</p>
+                        <p style="font-size:.8rem;color:grey;">1 day ago</p>
+                    </div>
+                    <div class="lr">
+                        <div class="like"><i class="fa-regular fa-heart"></i></div>
+                        <div class="remove"><i class="fa-solid fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="cmt_content">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
+                    fuga. Et harum quidem rerum facilis est et expedita distinctio.
+
+                </div>
+            </div>
+            <div class="comment_sample">
+                <div class="cmt_first">
+                    <div class="nacm">
+                        <p>Suyog Sapkota</p>
+                        <p style="font-size:.8rem;color:grey;">1 day ago</p>
+                    </div>
+                    <div class="lr">
+                        <div class="like"><i class="fa-regular fa-heart"></i></div>
+                        <div class="remove"><i class="fa-solid fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="cmt_content">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
+                    fuga. Et harum quidem rerum facilis est et expedita distinctio.
+
+                </div>
+            </div>
+            <div class="comment_sample">
+                <div class="cmt_first">
+                    <div class="nacm">
+                        <p>Suyog Sapkota</p>
+                        <p style="font-size:.8rem;color:grey;">1 day ago</p>
+                    </div>
+                    <div class="lr">
+                        <div class="like"><i class="fa-regular fa-heart"></i></div>
+                        <div class="remove"><i class="fa-solid fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="cmt_content">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
+                    fuga. Et harum quidem rerum facilis est et expedita distinctio.
+
+                </div>
+            </div>
+            <div class="comment_sample">
+                <div class="cmt_first">
+                    <div class="nacm">
+                        <p>Suyog Sapkota</p>
+                        <p style="font-size:.8rem;color:grey;">1 day ago</p>
+                    </div>
+                    <div class="lr">
+                        <div class="like"><i class="fa-regular fa-heart"></i></div>
+                        <div class="remove"><i class="fa-solid fa-trash"></i></div>
+                    </div>
+                </div>
+                <div class="cmt_content">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                    deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                    provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum
+                    fuga. Et harum quidem rerum facilis est et expedita distinctio.
+
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <div class="edit">
+        <div style="margin-left:1vw;">Edit your Menu </div>
+        <div id="i_childs">
+
+            <div>
+
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+    <script>
+
+
+
+        var edits = document.getElementsByClassName("edit")[0];
+
+
+        var valued_menu = [
+            "Newari Khaja Set", "Chicken Swarma", "Thai set",
+            "Momo", "Alu stick", "Dew", "Fanta", "Buff momo", "Veg momo",
+            "Rice", "Roti masu", "Beverages"
+        ];
+        var l = valued_menu.length;
+        var variable_class = document.getElementById("menu_type");
+
+        // Ensure to use innerHTML instead of innerHtml
+        // Also, loop bounds changed to `i < l`
+        var app2 = document.createElement("div");
+        app2.classList.add("addition");
+        app2.innerText = "ADD + ";
+        var i_childs = document.getElementById("i_childs");
+        i_childs.appendChild(app2);
+
+
+        var app3 = document.createElement("input");
+        app3.placeholder = "Search your menu";
+        app3.classList.add("search_menu");
+        i_childs.appendChild(app3);
+        for (var i = 0; i < l; i++) {
+            var app = document.createElement("a");
+            // You can set an actual href link if you want
+            app.href = "#"; // Keep it '#' if you don't have an actual link
+            app.innerText = valued_menu[i];
+            // Append the new anchor element to the `menu_type` element
+            variable_class.appendChild(app);
+            var app2 = document.createElement("p");
+            app2.innerText = valued_menu[i];
+            var i_childs = document.getElementById("i_childs");
+            i_childs.appendChild(app2);
+        }
+
+
+        var v = 0;
+        var parent_container = document.getElementsByClassName("sliding_container")[0];
+        var slider = document.getElementsByClassName("slider")[0];
+
+        // Attach event listener to the first `slider` element
+        slider.addEventListener("click", function () {
+            if (v == 0) {
+                slider.style.marginLeft = "2vw"; // Access style property
+                v = 1;
+                slider.style.background = "rgba(0,0,255,1)";
+                parent_container.style.background = "rgba(76, 76, 209, 0.5)"; // Access style property
+            } else {
+                slider.style.marginLeft = "0vw"; // Access style property
+                v = 0;
+                slider.style.background = "grey";
+                parent_container.style.background = ""; // Access style property
+            }
+        });
+
+
+        // Get the `body` element
+        // Get the `body` element
+        var body = document.getElementsByTagName("body")[0];
+
+        // Get the `menu_editor` element
+        var menu_editor = document.getElementById("menu_editor");
+
+        // Get the `edit` element
+        var edits = document.getElementsByClassName("edit")[0];
+
+        // A variable to track whether the `edit` element is currently visible
+        var isEditVisible = false;
+
+        // Add a click event listener to the `menu_editor` element
+        menu_editor.addEventListener("click", function (event) {
+            // Stop the event from propagating to the body event listener
+            event.stopPropagation();
+
+            // Make the `edit` element visible
+            edits.style.visibility = "visible";
+            // Set the `isEditVisible` flag to true
+            isEditVisible = true;
+        });
+
+        // Add a click event listener to the `body` element
+        body.addEventListener("click", function () {
+            // Check if the `edit` element is visible
+            if (isEditVisible) {
+                // Hide the `edit` element
+                edits.style.visibility = "hidden";
+                // Reset the `isEditVisible` flag
+                isEditVisible = false;
+            }
+        });
+
+
+
+
+
+
+
+
+    </script>

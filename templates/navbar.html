@@ -1,0 +1,281 @@
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  </head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+      <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
+
+<style>
+* {
+      padding: 0;
+      margin: 0;
+    }
+    body {
+      background-color:black;
+      font-family: 'Montserrat', sans-serif;
+    }
+.sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 18vw;
+      background-color: black;
+      padding: 24px;
+    }
+    
+    .sidebar .navigation ul {
+      list-style: none;
+      margin-top: 20px;
+    }
+    .sidebar .navigation ul li {
+      padding: 10px 0px;
+    }
+	.logo a{
+	font-size:1.4rem;
+	letter-spacing:1px;
+	text-decoration:none;
+	color:white;
+	
+	}
+    .sidebar .navigation ul li a {
+      color: grey;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+    }
+    .sidebar .navigation ul li a:hover,
+    .sidebar .navigation ul li a:active,
+    .sidebar .navigation ul li a:focus {
+      color: #ffffff;
+    }
+    .sidebar .navigation ul li a:hover .fa,
+    .sidebar .navigation ul li a:active .fa,
+    .sidebar .navigation ul li a:focus .fa {
+      color: #b3b3b3;
+    }
+    .sidebar .navigation ul li .fa {
+      font-size: 1.4remx;
+      margin-right: 10px;
+    }
+    .sidebar .navigation ul li a:hover .fa:hover,
+    .sidebar .navigation ul li a:hover .fa:active,
+    .sidebar .navigation ul li a:hover .fa:focus {
+      color: #ffffff;
+    }
+    .sidebar .policies {
+      position: absolute;
+      bottom: 100px;
+    }
+    .sidebar .policies ul {
+      list-style: none;
+    }
+    .sidebar .policies ul li {
+      padding-bottom: 5px;
+    }
+    .sidebar .policies ul li a {
+      color: #b3b3b3;
+      font-weight: 500;
+      text-decoration: none;
+      font-size: .9rem;
+    }
+    .sidebar .policies ul li a:hover,
+    .sidebar .policies ul li a:active,
+    .sidebar .policies ul li a:focus {
+      text-decoration: underline;
+    }
+
+   
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      background-color: #101010;
+      padding: 14px 30px;
+	  left:20vw;
+	  top:0;
+	  position:fixed;
+	  height:6vh;
+	  width:80vw;
+    }
+    
+    .topbar .navbar {
+      display: flex;
+	  width:30%;
+	  margin-left:65%;
+	  align-items:center;
+	  
+      
+	  text-decoration:none;
+    }
+    .topbar .navbar a{
+	text-decoration:none;
+	color:white;
+	font-size:1rem;
+	width:35%;
+	border-radius:40px;
+	padding:10px;
+	margin-left:5%;
+	transition:.6s;
+	align-items:center;
+	text-align:center;
+	
+	}
+    .topbar .navbar a:hover,
+    .topbar .navbar a:active,
+    .topbar .navbar a:focus {
+      background-color:black;
+    }
+
+
+.mainbody{
+      left: 20vw;
+      position:fixed;
+	  top:12vh;
+	  color:white;
+	  padding:2vw;
+      width:80vw;
+	  background-color:rgba(70,70,79,0.2);
+	  height:88vh;
+
+	  }
+
+
+
+</style>
+
+
+
+
+ <div class="sidebar">
+    <div class="logo">
+      <a href="{% url 'homepage' %}">
+        KhojauHub
+      </a>
+    </div>
+
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="{% url 'homepage' %}">
+            <span class="fa fa-home"></span>
+            <span>Home</span>
+          </a>
+        </li>
+
+        <li>
+		
+		  {% if logged == 0 %}
+          <a href="{% url 'maps' mode='0' %}">
+		  {% else %}
+		  <a href = "{% url 'maps' mode='2' %}">
+		  {% endif %}
+            <i class="fa-solid fa-location-dot"></i>
+            <span> Map</span>
+          </a>
+        </li>
+{% if logged != 0 %}
+        <li>
+          <a href="{% url 'Mybookmarks' %}">
+            <span class="fa fa-bookmark"></span>
+            <span>Bookmark</span>
+          </a>
+        </li>
+	
+	<li>
+          <a href="{% url 'Myhistory' %}">
+            <span class="fa fa-clock-rotate-left"></span>
+            <span>History</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="{% url 'top_picks' id='All' %}">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <span> Top picks near you</span>
+          </a>
+        </li>
+{% endif %}
+	<li>
+          <a href="{% url 'searchbar' %}">
+            <span class="fa-solid fas fa-magnifying-glass-plus"></span>
+            <span> Search Bar</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="{% url 'recommendations' 'All' %}">
+            <span class="fa fas fa-icons"></i></span>
+            <span>Recommended items</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="#">
+            <span class="fa fas fa-pizza-slice"></i></span>
+            <span>Special offers</span>
+          </a>
+        </li>
+		{% if logged != 0%}
+<li>
+          <a href="#">
+           <i class="fa-solid fa-arrow-right-from-bracket" style="transform:rotate(180deg);margin-right:.8vw;"></i>
+            <a href = "{% url 'logout' %}">log Out</a>
+          </a>
+        </li>
+{% endif %}
+
+	
+      </ul>
+    </div>
+
+
+
+    <div class="policies">
+      <ul>
+        <li>
+          <a href="#">Cookies</a>
+        </li>
+        <li>
+          <a href="#">Privacy</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+<div class="topbar">
+      
+
+      <div class="navbar">
+	     
+	  {% if logged == 0 %}
+     
+        
+       
+            <a href="{% url 'signup' %}">Sign Up</a>
+	        
+       
+	<a href="{% url 'login' %}">
+       Log In
+	</a>
+	{% else %}
+	       {% if bu %}
+		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> Profile</a>
+
+			{% else %}
+			<a href="{% url 'user_page' %}"><i class="fa-solid fa-user"></i> Profile</a>
+
+			 {% endif %}
+	     <a href = "#"> <i class="fa-solid fa-globe"></i> Lan-en</a>
+	
+	{% endif %}
+	
+	
+      </div>
+
+	   </div>
