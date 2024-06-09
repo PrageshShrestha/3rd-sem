@@ -16,8 +16,8 @@
   {% for history in histories %}
   <div class="hist">
   <img src="{{history.product.picture.url}}" alt = "{{history.product.product_name}}" class="img_busi">
-  <div>
-  <div style="display:inline-flex;"><a>{{history.product.product_name}}</a>  <a style="font-size:0.8rem;text-decoration:none;color:white;margin-left:2vw;">{{history.business.name}}</a></div> <br>
+  <div class="infoo">
+  <div style="display:inline-flex;"><a href="{% url 'product' id=history.product.token %}" style="text-decoration:none;color:white;">{{history.product.product_name}}</a>  <a style="font-size:0.8rem;text-decoration:none;color:white;margin-left:2vw;" href="{% url 'business_profile' history.business.token %}">{{history.business.name}}</a></div> <br>
   <div style="display:inline-flex;color:grey;font-size:.8rem;">{{history.category}} . {{history.sub_category}} . {{history.item_name}} </div>
   <div>{{history.time}}</div>
   </div>
@@ -48,15 +48,26 @@
 <style>
 .history_body{
 width:55vw;
-height:100%;
+height:118vh;
 overflow-y:scroll;
 cursor:pointer;
 
 
 }
+.infoo{
+
+margin-left:5vw;
+}
+img{
+width:7vw;
+height:10vh;
+margin-left:3vw;
+
+}
 .hist{
 width:50vw;
 padding:20px;
+display:inline-flex;
 margin-top:2vh;
 border-radius:10px;
  background-color:rgba(80,80,80,0.2);

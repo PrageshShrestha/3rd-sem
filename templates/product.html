@@ -1,0 +1,463 @@
+
+
+   <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            background-color: #333;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            text-align: center;
+            display: block;
+        }
+
+        .navbar a:hover {
+            background-color: #575757;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+			color:white;
+			margin-left:2vw;
+        }
+
+        .navbar .links {
+            display: flex;
+            justify-content: space-around;
+            flex-grow: 1;
+        }
+
+        .content {
+            padding-top: 60px; /* Adjust based on the height of your navbar */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">Khojauhub</div>
+        <div class="links">
+            <a href="{% url 'homepage' %}">Home</a>
+            {% if logged == 0 %}
+          <a href="{% url 'maps' mode='0' %}">
+		  {% else %}
+		  <a href = "{% url 'maps' mode='2' %}">
+		  {% endif %}
+		  Maps </a>
+            <a href="{% url 'searchbar' %}">Searchbar</a>
+            <a href="#">Special Offers</a>
+            <a href="#blog">Blog</a>
+        </div>
+    </div>
+<html>
+    <body style="background-color:white;">
+        <style>
+		
+            .mainbody1{
+			width:100vw;
+			margin-left:0vw;
+			height:150vh;
+			font-family:sans-serif;
+			overflow:hidden;
+			letter-spacing:1px;
+			
+background:rgba(240,240,240,0.6);			display:inline-flex;
+			}
+			body{
+background:rgba(240,240,240,0.6);			
+			}
+            .rightdiv{
+                width:25vw;
+                height:70vh;
+                background:white;
+                padding:25px;
+                margin-left: 1vw;
+                margin-right: 1vw;
+                margin-top:15vh;
+
+
+            }
+
+            .sauravchhaka{
+                width:70%;
+                display:inline-flex;
+            }
+
+            .sauravchhaka p{ 
+                margin-left :5px;
+                padding: 5px;
+				margin-top:1vh;
+				margin-bottom:1vh;
+				font-size:.8rem;
+                border: 1px inset orange;
+
+
+            }
+            .mainimg{
+                width:100%;
+                height:40vh;
+                margin-bottom:10vh ;
+            }
+
+            .sauravchhaka2{
+                width:100%;
+                height:10vh;
+                display: inline-flex;
+                word-wrap: break-word;
+            }
+
+            .sauravchhaka2 img{
+                width:23%;
+                height:100%;
+                margin-left:1% ;
+
+            }
+            .leftdiv{
+                width:30vw;
+                height:50vh;
+                background:white;
+                padding:25px;
+                margin-left: 0vw;
+                margin-right: 0vw;
+                margin-top: 15vh;
+
+            }
+            .gaysaurav{
+                width: 100%;
+                border-bottom:2px inset grey;
+                color: gray;
+                display: inline-flex;
+				margin-top:-2vh;
+            }
+
+            .messi{
+                display:inline-flex; 
+                width:100%;
+                color:black;
+				margin-top:-1vh;
+                }
+
+                .siuu{
+				margin-top:-2vh;
+                display:inline-flex; 
+                width:100%;
+                color:black;
+
+                }
+
+.right_div_first{
+margin-bottom:-4vh;
+
+width:30vw;
+display:inline-flex;
+align-items:center;
+text-align:center;
+color:rgba(0,0,0,0.7);
+}
+.right_div_first p{
+width:9vw;
+
+}
+.variants{
+width:100%;
+display:inline-flex;
+height:40vh;
+margin-top:-1vh;
+padding:0;
+
+
+}
+.variants_cl{
+width:10vw;
+height:48vh;
+background:white;
+padding:10px;
+text-decoration:none;
+color:grey;
+border:.5px solid grey;
+transition:.5s;
+
+}
+.variants_cl:hover{
+border:1px solid black;
+
+}
+.variants_cl img{
+width:10vw;
+height:30vh;
+
+}
+#pd_desc{
+width:100%;
+max-height:6vh;
+transition:.5s;
+min-height:6vh;
+overflow:hidden;
+cursor:pointer;
+
+
+
+}
+.variants_cli{
+width:18vw;
+height:48vh;
+background:white;
+padding:5px;
+text-decoration:none;
+color:grey;
+transition:.5s;
+overflow-x:hidden;
+overflow-y:auto;
+
+}
+.variants_cli:hover{
+transform:scale(1.1);
+
+}
+.variants_cli img{
+width:18vw;
+height:30vh;
+
+}
+.cmts{
+width:90%;
+padding:10px 20px ;
+height:auto;
+min-height:8vh;
+box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+margin-top:1vh;
+
+}
+.cmt_sec{
+width:100%;
+height:auto;
+
+}
+.rpl{
+width:29vw;
+height:60vh;
+overflow:hidden;
+box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+padding:20px;
+position:fixed;
+font-family:sans-serif;
+top:15vh;
+left:66vw;
+background:white;
+
+
+}
+        </style>
+
+        <div class="mainbody1">
+            <div class="rightdiv">
+                <div class="right_div_first">
+				<p>
+				
+				{{prod.likes}}
+				</p>
+				
+				<p>
+				{{prod.views}}
+				</p>
+				<p>
+				{{prod.business_mdl.name}}
+				</p>
+				</div>
+                <p style="font-size:2rem; margin-bottom:-3vh;color:grey;">
+                    {{prod.product_name}}</p>
+                <p>{{prod.business_mdl.name}}</p>
+                
+                <div class="sauravchhaka">
+                    <p>
+                        Vat Free
+                        
+                    </p>
+                    <p>
+                        Free Shipping
+                    
+                    </p>
+                    <p>
+                        OUTLET%
+                    </p>
+
+                </div>
+
+                
+                <img src="{{prod.picture.url}}" class="mainimg" alt ="no image found" srcset="">
+ 
+       <div class="variants">
+	   
+	   {% for i in variants %}
+	   <a href="{% url 'product' id=i.token %}" class="variants_cl">
+	  <img src="{{ i.picture.url}}" alt="{{i.product_name}}">
+	  <p style="font-size:1.2rem;">
+	  {{i.product_name}}
+	  </p>
+	  <p style="font-size:.8rem;color:orange;margin-top:-2vh;">Minimum price Rs.{{i.price}}</p>
+	  <p style="font-size:.9rem;margin-top:-2vh;">{{i.business_mdl.name}}-9</p>
+	   </a>
+	   
+	   
+	   {% endfor %}
+	   
+	   
+	   
+	   </div>
+
+
+            </div>
+
+            <div class="leftdiv">
+                <p style="width:100%; text-align:right ; color:grey;">
+                    Lowest price (30) days
+
+                </p>
+
+                <h1 style="color:orangered;font-size: 3rem;width:100%; text-align:right ;margin-top:-2vh;">
+                    Rs.{{prod.price}}
+                </h1>
+                <p style="text-decoration: underline; font-size: 0.8rem;width:100%; text-align:right ; color:grey;margin-top:-2vh;">
+                    {{prod.price_range}}
+                </p>
+                
+                
+                <div class="gaysaurav">
+                    <p>
+                        Pay in 12 months Guess
+                    </p>
+                    <p style="float:right;margin-left:60%;text-align: right;">
+                        Rs.{{prod.price}}
+                    </p>
+                </div>
+
+                
+                <div class="gaysaurav">
+                    <p style="text-decoration: underline; font-family: 0.8rem;">
+                        effective intrest p.a. 11.9%*** Total: 370.68$ | To the rate calculator and legal hints
+                    </p>
+
+                    <p style="float: right;">
+                        monthly
+                    </p>
+                </div>
+
+                <div class="messi">
+
+                    <p style="float:left;width:65%;">
+                        EXtra points for a limited time 
+                    </p>
+                    <p style="float:right;width:35%;text-align: right;">
+                        +10.98
+                    </p>
+
+                </div>
+
+                <div class="siuu">
+                    <p style="text-decoration: underline; font-size:0.8rem;float:left;width:65%;">
+                        what do these range mean?
+                    </p>
+                    <p style="text-decoration: line-through; font-size: .8rem;float:right;width:35%;text-align: right;">
+                        {{prod.price_range}}
+                    </p>
+                </div>
+				<div id="pd_desc">
+				<p id="pd_opener">More</p>	
+				<p>{{prod.description}}</p>
+				
+				
+				
+				</div>
+				{% if cmted == 0 %}
+				<div class="review">
+				
+				
+				</div>
+				{% endif %}
+				<div class="cmt_sec">
+				<p style="font-size:1.2rem;">Comments</p>
+				{% for i in comments %}
+				<div class="cmts">
+				<p style="color:black;letter-spacing:.5px;">{{i.user.name}}</p>
+				<p style="color:grey;font-size:.8rem;margin-top:-1vh;">{{i.datetime}}</p>
+				<p style="color:black;font-size:.9rem;">{{i.comment}}</p>
+				
+				</div>
+				
+				{% endfor %}
+				
+				</div>
+            </div>
+
+
+
+
+            </div>
+			
+			
+			
+			<div class="rpl">
+			<p>Related Products </p>
+			<div style="">
+			{% for i in rpf %}
+			<a href="{% url 'product' id=i.token %}" class="variants_cli">
+			 <img src="{{ i.picture.url}}" alt="{{i.product_name}}">
+	  <p style="font-size:1.2rem;width:100%;">
+	  {{i.product_name}}
+	  </p>
+	  <p style="font-size:.8rem;color:orange;width:100%;margin-top:-2vh;">Minimum price Rs.{{i.price}}</p>
+	  <p style="font-size:.9rem;margin-top:-2vh;width:100%;">{{i.sub_category}}</p>
+			
+			
+			
+			</a>
+			
+			
+			{% endfor %}
+			
+			</div>
+			
+			
+			</div>
+
+    </body>
+</html>
+<script>
+var desc = document.getElementById("pd_desc");
+var a = 0;
+
+desc.addEventListener("click", function() {
+    toggler(desc, a);
+});
+
+function toggler(desc, a) {
+    if (a === 0) {
+        desc.style.maxHeight = "100vh";
+        a = 1;
+    } else {
+        desc.style.maxHeight = "6vh";
+        a = 0;
+    }
+}
+
+
+
+
+
+</script>

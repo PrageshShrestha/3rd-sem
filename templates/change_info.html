@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <title>Create Account</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+</head>
+<body style="background-color:rgb(9,9,9);">
+   
+        <form method="POST" id="change_form">
+		{% csrf_token %}
+            <p style="font-size:2rem;">Change your Info here!!</p>
+			<p>At khojauhub</p>
+
+            <label for="username">New Username:</label><br>
+            <input type="text" id="username" name="username" value="{{user.name}}" autofill=False><br><br>
+
+            <label for="email">New Email:</label><br>
+            <input type="email" id="email" name="email" value="{{user.email}}" autofill=false><br><br>
+
+            <label for="password">Previous Password:</label><br>
+            <input type="password" id="password" name="password" value="{{user.password}}" autofill=false><br><br>
+
+           
+            <button id="button">Change</button> 
+			<br><br><br><br>
+			
+        <a class="fp" href="{% url 'user_page' %}">Cancel</a>
+    </div>
+
+       </form>
+    
+   
+    </body>
+	
+	
+	<script>
+	
+	 document.getElementById('username').addEventListener('input', updateusername);
+        document.getElementById('email').addEventListener('input', updateemail);
+		document.getElementById('password').addEventListener('input', updatepassword);
+       const passwordLabel = document.getElementById('password_label');
+			const password_tag = document.getElementById("password");
+			const email_tag = document.getElementById("email");
+			const username_tag = document.getElementById('username');
+			const btn = document.getElementById("button");
+            function updateusername(){
+			 const username = document.getElementById('username').value;
+			   const currentUsername = "{{user.name}}";
+			if (username===currentUsername){
+			password_tag.style.display = "flex";
+			
+			email_tag.style.display="flex";
+			btn.innerHTML="Unchanged";
+			}
+			else{
+			
+			password_tag.style.display = "flex";
+			username_tag.style.display = "flex";
+			email_tag.style.display="none";
+			btn.innerHTML="Change Username";
+			};
+			
+			
+			};
+			function updatepassword(){
+			 const currentPassword = "{{user.password}}";
+			 const password = document.getElementById('password').value;
+			if (password!==currentPassword){
+				username_tag.style.display = "none";
+			email_tag.style.display="flex";
+			btn.innerHTML="Change Password";
+			}
+			else{
+				password_tag.style.display = "flex";
+			username_tag.style.display = "flex";
+			email_tag.style.display="flex";
+			btn.innerHTML="Change";
+			};
+			};
+        function updateemail() {
+                       const currentEmail = "{{user.email}}";
+            const email = document.getElementById('email').value;
+
+			
+			if (email!==currentEmail){
+				username_tag.style.display = "none";
+			
+			btn.innerHTML="Change Email";
+			}
+			else{
+				username_tag.style.display = "flex";
+			btn.innerHTML="Change";
+			};
+			
+           
+        };
+
+       
+	
+	
+	
+	
+	
+	
+	
+	</script>
+	<script>
+	 $("#button").on("click" , function(e){
+	e.preventDefault();
+	
+        // Get form elements
+        var username = document.getElementById('username').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var password = document.getElementById('password').value.trim();
+       
+	
+	
+	$.ajax({
+	type: 'POST',
+      url: "{% url 'ci' %}",
+	  data:{
+	  
+	  "username":username,
+	  "email":email,
+	  "password":password,
+	  
+	  'csrfmiddlewaretoken': '{{csrf_token}}',
+
+	  },
+	  success:function(response){
+	  
+	  if(response.redirect == 1){
+	  var url = "{% url 'user_page' %}";
+	  window.location.href = url;
+	  }
+	  else if(response.email){
+	  
+	  var baseUrl = "{% url 'otp' 'placeholder' %}";
+                var redirectUrl = baseUrl.replace('placeholder', response.email);
+				window.location.href = redirectUrl;
+	  }
+	  else{
+	  console.log("empty");
+	  }
+	  },
+	   error: function(xhr, errmsg, err) {
+        console.log(xhr.status + ': ' + xhr.responseText);
+      }
+	  });
+	});
+	
+	</script>
+</html>
+
+<style>
+#change_form{
+width:25vw;
+height:75vh;
+font-family:sans-serif;
+margin-left:35vw;
+background:rgb(18,18,18);
+color:white;
+margin-top:5vh;
+padding:5vw;
+padding-top:2vw;
+text-align:center;
+
+
+}
+#button{
+transition:0.5s;
+}
+.fp{
+color:white;align-items:center;text-align:center;margin-left:0vw;margin-top:5vh;
+font-size:1rem;
+}
+.fp:hover{
+color:rgb(0,225,0);
+
+}
+button{
+width:27vw;
+padding:10px 20px;
+border:none;
+outline:none;
+background:rgb(30,215,96);
+border-radius:20px;
+margin-top:5vh;
+cursor:pointer;
+font-weight:strong;
+
+}
+.sig{
+width:40vw;
+text-align:center;
+align-items:center;
+padding-top:3vh;
+margin-top:5vh;
+border-top:.5px solid grey;
+
+}
+button:hover{
+transform:scale(1.1);
+
+}
+label{
+font-size:.9rem;
+
+
+}
+input{
+background:black;
+border:none;
+color:white;
+font-size:1rem;
+outline:none;
+border:2px solid rgba(255,255,255,0.8);
+width:25vw;
+padding:5px 10px;
+height:4vh;
+border-radius:5px;
+border-color:rgba(255,255,255,0.6);
+
+
+}
+input:hover{
+
+border-color:rgba(255,255,255,0.8);
+
+
+
+}
+
+
+</style>

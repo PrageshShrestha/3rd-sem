@@ -1,0 +1,66 @@
+<div class="container">
+{% for i in prods %}
+<a href="{% url 'product' i.token %}" class="prod_a">
+
+<img src="{{i.picture.url}}" alt="{{i.product_name}}">
+
+
+
+<div class="prod_b">
+{{i.product_name}}<br>
+{{i.category}}<br>
+{{i.sub_category}}<br>
+{{i.price}}<br>
+
+
+</div>
+
+
+
+
+
+
+</a>
+
+
+
+
+
+{% endfor %}
+
+</div>
+
+<style>
+.container{
+width:100vw;
+height:100vh;
+overflow:auto;
+background:black;
+
+}
+.prod_a{
+width:40vw;
+height:10vh;
+margin-left:30vw;
+background:rgba(255,255,255,0.2);
+border-radius:20px;
+color:white;
+text-decoration:none;
+padding:30px;
+display:inline-flex;
+margin-bottom:5vh;
+}
+.prod_a img{
+width:8vw;
+height:9vh;
+
+}
+.prod_b{
+letter-spacing:1px;
+word-spacing:1px;
+margin-left:4vw;
+
+
+}
+
+</style>

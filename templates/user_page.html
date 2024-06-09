@@ -1,5 +1,5 @@
 
-{{views_get}}
+
 
 
 <html>
@@ -17,6 +17,30 @@
 padding:0;
 margin:0;
 
+
+}
+
+.hist_prod{
+width:20vw;
+height:8vh;
+padding:10px;
+margin-bottom:1vh;
+border-radius:10px;
+background:rgba(0,0,0,0.43);
+display:inline-flex;
+
+}
+.hist_prod img{
+width:6vw;
+height:8vh;
+float:left;
+}
+.hist_p{
+float:right;
+color:white;
+letter-spacing:1px;
+word-spacing:1px;
+margin-left:1vw;
 
 }
 body{
@@ -157,8 +181,16 @@ font-size:1.4rem;
 display:inline-flex;
 
 }
+.link_tn{
+color:white;
+
+
+
+margin-right:2vw;
+border-radius:4px;
+}
 .rec{
-height:16vh;
+height:14vh;
 width:100%;
 margin-top:2vh;
 }
@@ -293,6 +325,7 @@ transition:1s;
 <p>{{user.name}}</p>
 <p>{{user.email}}</p>
 <p>{{user.password}}</p>
+<a href="{% url 'change_info' %}">Edit</a>
 </div>
 <div class="arow b">
 <div class='dataa'>
@@ -345,7 +378,15 @@ Most Searched
 </div>
 <div class='rec'>
 <p class="p_t_user">Trending now</p>
+{% for i in tn %}
 
+<a class="link_tn" href="{% url 'product' id=i.token %}">
+@{{i.product_name}} 
+
+</a>
+
+
+{% endfor %}
 </div>
 
 <div class="views">
@@ -364,13 +405,27 @@ Most Searched
 
 
  <canvas id="myChart"></canvas>
-
-  
+<p style="text-align:center;margin-top:5vh;">Graph of your views as per hourly rate</p>
+<p style="text-align:center;">6 AM to 6 PM</p>  
 </div>
 
 <div class="graph b">
 
 <p class="p_t_user">Recently visited</p>
+{% for j in history_searched %}
+<a class="hist_prod" href="{% url 'product' j.product.token %}">
+<img src="{{j.product.picture.url}}" alt="{{j.product.product_name}}">
+
+<div class="hist_p">
+{{j.product.product_name}}<br>
+{{j.product.business.name}}
+</div>
+</a>
+{% endfor %}
+</div>
+
+
+
 </div>
 
 
@@ -382,16 +437,43 @@ Most Searched
 <div class="c" id="comments_user">
 <p class="p_t_user">
 Comments</p>
+{% if comments %}
+{% for i in comments %}
+<div style="width:10vw;margin-bottom:10px;height:auto;padding:10px;letter-spacing:1px;box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;">
+{{i.datetime}}<br>
+To:{{i.business.name}}<br>
+On:{{i.product_id.product_name}}<br>
+{{i.comment}}
+
+
+</div>
+
+
+
+{% endfor %}
+{% else %}
+<p >No comments yet </p>
+<a style="color:white;" href="{% url 'homepage' %}"> Go to home to comment </a>
+
+{% endif %}
 </div>
 
 <div class="c" id="ratings_user">
 <p class="p_t_user">Ratings
 </p>
+{% for j in rating %}
+- Rated {{j.ratings}}  to {{j.product_id.product_name}} on {{j.datetime}} </p><br>
+
+
+{% endfor %}
+
+
 </div>
 
 <div class="c" id="address_user">
 <p class="p_t_user">
 Address</p>
+<a style="color:white;text-decoration:none;font-family:sans-serif;font-size:3rem;" href="{% url 'maps' mode='1' %}">{{user.area_code}}</a>
 </div>
 
 </div>

@@ -15,11 +15,33 @@
 * {
       padding: 0;
       margin: 0;
+	  
     }
     body {
       background-color:black;
       font-family: 'Montserrat', sans-serif;
     }
+	::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(48,48,50); 
+  border-radius:5px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background:rgb(20,20,20); 
+  border-radius:5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #0a0a0a; 
+}
+
 .sidebar {
       position: fixed;
       left: 0;
@@ -140,9 +162,12 @@
 	  top:12vh;
 	  color:white;
 	  padding:2vw;
-      width:80vw;
+      width:75vw;
 	  background-color:rgba(70,70,79,0.2);
-	  height:88vh;
+	  min-height:200vh;
+	  overflow-y:scroll;
+	  
+	  
 
 	  }
 
@@ -264,7 +289,7 @@
        Log In
 	</a>
 	{% else %}
-	       {% if bu %}
+	       {% if bu == 1 %}
 		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> Profile</a>
 
 			{% else %}
@@ -274,7 +299,7 @@
 	     <a href = "#"> <i class="fa-solid fa-globe"></i> Lan-en</a>
 	
 	{% endif %}
-	
+	{{bu}}
 	
       </div>
 

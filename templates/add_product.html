@@ -163,20 +163,18 @@ Product images
 <br>
 <br>
 <div class='nvb_b'>
-<div class='nvb a'>
-Dashboard
+<div class='nvb a'><a href="{% url 'business_profile' business.token %}">
+Homepage</a>
 </div>
-<div class='nvb b'>
-Products
+<div class='nvb b' > <a href="{% url 'product_list' %}">
+Product List</a>
 </div>
-<div class='nvb c'>
-Customers
+
+<div class='nvb d' ><a href = "{% url 'comments' %}">
+Comments</a>
 </div>
-<div class='nvb d'>
-Messages
-</div>
-<div class='nvb e'>
-Promotions / discounts
+<div class='nvb e' <a href="{% url 'promo' %}">
+Promotions / discounts</a>
 </div>
 <div class='lo'>
 <p>{{business.name}}</p>
@@ -219,7 +217,7 @@ var md=document.getElementsByClassName("md");
 function darkmode_maker(){
 darkmode.style.background="rgba(230,230,230,0.1)";
   elediv.style.background="rgba(255,255,255,0.8)";
-  body_tag.style.background = "rgb(49, 51, 56)";
+  body_tag.style.background = "rgb(20, 20, 20)";
   body_tag.style.color = 'white';
   for (var i = 0; i < input_tags.length; i++) {
     input_tags[i].style.background = "rgba(49, 51, 56, 0.3)";
@@ -227,7 +225,7 @@ darkmode.style.background="rgba(230,230,230,0.1)";
 	
   }
   for(var i=0;i<md.length;i++){
-  md[i].style.background = "rgb(49, 51, 56)";
+  md[i].style.background = "rgb(25, 25, 25)";
   }
   elediv.style.marginLeft = "50%";
 
@@ -269,7 +267,7 @@ padding:0;
 margin:0;
 font-size:1rem;
 letter-spacing:1px;
-
+font-family:sans-serif;
 
 }
 body{
@@ -305,7 +303,7 @@ width:40px;
 height:20px;
 border-radius:20px;
 cursor:pointer;
-background:rgb(39,43,47);
+background:rgb(20,20,20);
 position:fixed;
 top:5vh;
 left:65vw;
@@ -319,11 +317,21 @@ padding-left:10%;
 text-align:left;
 color:grey;
 display:inline-block;
+font-family:sans-serif;
 cursor:pointer;
 }
 .nvb:hover{
-color:rgb(171,145,249);
-background:rgb(229,221,253);
+text-decoration:none;
+
+color:white;
+background:rgb(50,50,50);
+}
+.nvb a{
+text-decoration:none;
+color:grey;
+}
+.nvb a:hover{
+color:white;
 }
 .nvb{
 margin-bottom:3vh;
@@ -356,7 +364,8 @@ display:flex;
 .md{
 letter-spacing:1px;
 width:35vw;
-height:140vw;
+min-height:100vh;
+max-height:140vh;
 display:block;
 border:0px inset grey;
 padding:10px;

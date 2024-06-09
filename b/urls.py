@@ -27,4 +27,11 @@ urlpatterns = [
    path("add_real_product" , views.add_real_product , name = "add_real_product"),
    path("logout" , views.logout , name = "logout"),
    path("recommendations/<str:category>",views.recommendations ,name = "recommendations"),
+   path("change_info" , views.change_info , name="change_info"),
+   path("ci" , views.ci , name="ci"),
+   path("cep" , views.change_email_password , name="cep"),
+   path("product_list" , views.product_list , name="product_list"),
+   path("comments" , views.comments_page , name = "comments"),
+   path("promo" , views.promo_discount , name="promo"),
+   path("product/<str:id>" , views.product_page , name="product"),
 ]

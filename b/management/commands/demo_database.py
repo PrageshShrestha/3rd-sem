@@ -201,48 +201,9 @@ class Command(BaseCommand):
             last_category.objects.create(lc_forekey=secondary_obj_bikingaccessories, item_name="Generic Biking 1")
             last_category.objects.create(lc_forekey=secondary_obj_bikingaccessories, item_name="Generic Biking 2")
 
-        def create_products():
-            categories = ["Electronics", "Clothing", "Books", "Home Decor", "Sports & Outdoors"]
-            subcategories = {
-        "Electronics": ["Smartphones", "Laptops", "Tablets", "Headphones", "Cameras"],
-        "Clothing": ["T-shirts", "Dresses", "Jeans", "Shoes", "Accessories"],
-        "Books": ["Fiction", "Non-fiction", "Biography", "Science Fiction", "Mystery"],
-        "Home Decor": ["Furniture", "Lighting", "Wall Art", "Rugs", "Decorative Pillows"],
-        "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear", "Sportswear", "Camping Supplies", "Biking Accessories"]
-    }
-            for _ in range(1,9):
-                category = random.choice(categories)
-                subcategory = random.choice(subcategories[category])
-                price_range = ["very_high" , "high","medium" ,"affordable"]
-                int2 = random.randint(0,3)
-                product = product_models.objects.create(
-                    product_name=f"{category} Product{_}",
-            price=random.randint(1000, 1000000),
-            description=f"This is a description for {category} product {_}",
-            token=f"product{_}token",
-            price_range = price_range[int2],
-            views=random.randint(1, 500),
-            likes=random.randint(1, 50),
-            picture="example.jpg",  # Placeholder image
-            category=category,
-            sub_category=subcategory,
-            weight=random.randint(100, 5000),
-            size=f"{random.randint(5, 50)}x{random.randint(5, 50)}",
-            negotiable=random.choice([True, False])
-        )
+       
         
-        def create_ratings():
-            users = user_model.objects.all()
-            products = product_models.objects.all()
-            for _ in range(10):
-                user = random.choice(users)
-                product = random.choice(products)
-                rating = random.randint(1, 5)
-                ratings.objects.create(
-            user=user,
-            product_id=product,
-            ratings=rating
-        )
+        
 
         def create_businesses():
             categories = ["Restaurant", "Clothing Store", "Bookstore", "Electronics Shop", "Fitness Center"]
@@ -270,7 +231,39 @@ class Command(BaseCommand):
            
             listed_items = (("Smartphones" ,("iPhone 13 Pro Max" ,  "Samsung Galaxy S21 Ultra" , "Google Pixel 6 Pro","OnePlus 9 Pro")))
         )
-
+        def create_products():
+            categories = ["Electronics", "Clothing", "Books", "Home Decor", "Sports & Outdoors"]
+            subcategories = {
+        "Electronics": ["Smartphones", "Laptops", "Tablets", "Headphones", "Cameras"],
+        "Clothing": ["T-shirts", "Dresses", "Jeans", "Shoes", "Accessories"],
+        "Books": ["Fiction", "Non-fiction", "Biography", "Science Fiction", "Mystery"],
+        "Home Decor": ["Furniture", "Lighting", "Wall Art", "Rugs", "Decorative Pillows"],
+        "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear", "Sportswear", "Camping Supplies", "Biking Accessories"]
+    }       
+            businesses = business_model.objects.get(token = "business0token")
+            
+            for _ in range(1,9):
+                category = random.choice(categories)
+                subcategory = random.choice(subcategories[category])
+                price_range = ["very_high" , "high","medium" ,"affordable"]
+                
+                
+                int2 = random.randint(0,3)
+                product = product_models.objects.create(
+                    product_name=f"{category} Product{_}",
+            price=random.randint(1000, 1000000),
+            description=f"This is a description for {category} product {_}",
+            token=f"product{_}token",
+            price_range = price_range[int2],
+            views=random.randint(1, 500),
+            likes=random.randint(1, 50),
+            business_mdl = businesses,
+            category=category,
+            sub_category=subcategory,
+            weight=random.randint(100, 5000),
+            size=f"{random.randint(5, 50)}x{random.randint(5, 50)}",
+            negotiable=random.choice([True, False])
+        )
 
         '''def create_categories_subcategories():
             categories = ["Electronics", "Clothing", "Books", "Home Decor", "Sports & Outdoors"]
@@ -288,7 +281,18 @@ class Command(BaseCommand):
         '''
 
         
-
+        def create_ratings():
+            users = user_model.objects.all()
+            products = product_models.objects.all()
+            for _ in range(10):
+                user = random.choice(users)
+                product = random.choice(products)
+                rating = random.randint(1, 5)
+                ratings.objects.create(
+            user=user,
+            product_id=product,
+            ratings=rating
+        )
 
         def create_area_data():
             for _ in range(10):
@@ -372,10 +376,10 @@ class Command(BaseCommand):
             create_categories_subcategories()
             create_users()
             
-
+            create_businesses()
             create_products()
             create_ratings()
-            create_businesses()
+            
             create_history()
             
             create_area_data()

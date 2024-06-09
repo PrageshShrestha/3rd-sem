@@ -29,6 +29,7 @@ background:rgba(50,50,50,0.8);
 
 <div class="mainbody">
 <p style="font-size:1.4rem;">Recommendations</p>
+<p style="color:grey;font-size:.9rem;">Based on your site experiance</p>
 <div id="form_factor">
 {% if category == "All" %}
 <a href = "{% url 'recommendations' 'All' %}" style="background:white;color:black;">All</a>
@@ -49,10 +50,36 @@ background:rgba(50,50,50,0.8);
 {% endfor %}
 </div>
 
-this is:
+
 {% for products in data4 %}
 
-name is : {{products.product_name}}<br>
+<a class="prod_class" href="{% url 'product' id=products.token %}">
+<div class="img_class">
+<img src="{{products.picture.url}}">
+
+</div>
+
+
+<div class="name_class">
+<p>{{products.product_name}}</p>
+
+<p style="color:grey;font-size:.8rem;">{{products.sub_category}}</p>
+
+
+
+
+</div>
+<div class="views_class">
+{{products.views}}
+
+
+</div>
+<div class="price_class">
+
+Rs.{{products.price}}
+</div>
+
+</a>
 
 
 
@@ -60,3 +87,55 @@ name is : {{products.product_name}}<br>
 
 
 </div>
+<style>
+.prod_class{
+text-decoration:none;
+color:white;
+letter-spacing:1px;
+width:70vw;
+display:inline-flex;
+padding:15px;
+margin-top:2vh;
+cursor:pointer;
+transition:.4s;
+border-radius:10px;
+}
+.prod_class:hover{
+background:rgba(255,255,255,0.1);
+
+
+}
+.image_class{
+width:7vw;
+height:100%;
+
+
+}
+
+img{
+width:7vw;
+height:100%;
+
+}
+.views_class{
+padding-top:2vh;
+
+}
+.name_class{
+width:30vw;
+padding-top:.5vw;
+
+align-items:left;
+text-align:left;
+margin-left:7vw;
+
+}
+.price_class{
+padding-top:2vh;
+margin-left:18vw;
+color:grey;
+
+
+}
+
+</style>

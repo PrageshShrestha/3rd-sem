@@ -262,9 +262,23 @@ def Email(request , receiver,extra_var):
         
           
 def otp(request , email_receiver):
+    password = 0
+    email=0
+    ps = 0
+    em = 0
+    if "new_password" in request.session:
+        password = request.session["new_password"]
+        ps = 1
+    if "new_email" in request.session:
+        email = request.session["new_email"]
+        em = 1
     context = {
     "email":email_receiver , 
-    "otp":request.session["number"]
+    "otp":request.session["otp"],
+    "password_received":password,
+    "email_received":email,
+    "ps":ps,
+    "em":em,
     }
     return render(request , "otp.html" , context)        
            
@@ -288,7 +302,8 @@ def actual(request):
             return redirect("homepage")
         else:
             actual(request , otp)
-    
+    else:
+        return error_display(request)
     
     
 def user_page(request):
@@ -317,6 +332,7 @@ def user_page(request):
             x_values_pie.append(cat)
             y_values_pie.append(views)
         history_data = history.objects.filter(user = user)
+        history_searched = history.objects.filter(user=user).order_by("-time")
         #for business 
         comments_p = comments.objects.filter(user = user).order_by("-datetime")
         ratings_p = ratings.objects.filter(user = user).order_by("-datetime")
@@ -339,23 +355,26 @@ def user_page(request):
             data5 = views_recorder.objects.get(user = user)
             save_data = [(1,100)]
             data5.set_data(save_data)
-            
+        trending = product_models.objects.all().order_by("-views")
+        
         context = {
         "user":user,
         "cat_graph":to_send_cat,
         "tv":total_visited,
-        "views":views,
+        "views":abs(views),
         #"x_values_pie":x_values_pie,
         "x_values_pie":["hello","hi","how","are"],
         "y_values_pie":y_values_pie,
         "ms":ms,
+        "history_searched":history_searched[:5],
+        "tn":trending[:5],
         "bs":businesses_searched,
         "cs":category_searched,
         "scs":sub_category_searched,
         "ins":item_name_searched,
         "ts":time_searched,
         "comments":comments_p,
-        "ratings":ratings_p , 
+        "rating":ratings_p , 
         "views_get":views_get,
         }
         return render(request,"user_page.html" , context)
@@ -376,6 +395,7 @@ def homepage(request):
     category_db = primary_subcategory.objects.all()
     category = []
     category_count = 0
+    
     if "business_token" in request.session:
         request.session["b/u"] = 1
     for i in category_db:
@@ -383,22 +403,24 @@ def homepage(request):
         category_count +=1
     request.session["category_count"] = category_count
     request.session["category"] = category
-    if not request.session.get("user_number"):
-        context = {
-        "logged":0,
+    if "user_number" not in request.session:
         
-        
-        }
-        return render(request, "homepage2.html",context)
-    elif "bu" in request.session:
-        business = business_model.objects.get(token = request.session["business_token"])
-        context = {
+        if "b/u" in request.session:
+            business = business_model.objects.get(token = request.session["business_token"])
+            context = {
         "logged":1,
         "bu":1,
         "business":business,
         
         }
-        return render(request , "homepage2.html" , context)
+            return render(request , "homepage2.html" , context)
+        else:
+            context = {
+        "logged":0,
+        
+        
+        }
+            return render(request, "homepage2.html",context)
     else:
         user = user_model.objects.get(token = request.session['user_number'])
         datas2 = product_models.objects.all()  
@@ -742,9 +764,9 @@ def top_picks(request, id):
         }
         
         return render(request, "top_picks.html", context)
+    else:
+        return error_display(request)
 
-def business_profile(request):
-    return render(request, " homepage.html" )
 def error_display(request):
  
     return render(request , "restricted_page.html")
@@ -849,7 +871,7 @@ def add_real_product(request):
             return JsonResponse(data , safe = False)
             
     else:
-        return homepage(request)
+        return error_display(request)
 def add_product(request , token):
     r = request.POST
     business = business_model.objects.get(token = token)
@@ -931,7 +953,8 @@ def bookmarks(request):
         
         }
         return render(request,"mybookmarks.html" , context)
-       
+    else:
+        return error_display(request)
 def logout(request):
     request.session.flush()
     return redirect("homepage")
@@ -956,34 +979,40 @@ def highest_ranker(query):
         returner =["medium" , "affordable"] 
     return returner  
 def recommendations(request , category):
-    user = user_model.objects.get(token = request.session["user_number"])
-    if category != "All":    
-        cate = primary_subcategory.objects.all()
+    if "user_number" in request.session:
+        user = user_model.objects.get(token = request.session["user_number"])
+        if category != "All":    
+            cate = primary_subcategory.objects.all()
         
-        data4 = recommended_ones(request,category)
-        context = {
-        "data4":data4,
-        "user":user,
-        "cate":cate,
-        "category":category,
-        }
-        return render(request, "recommendations.html",context)
-    else:
-        cate = primary_subcategory.objects.all()
+            data4 = recommended_ones(request,category)
+            context = {
+            "data4":data4,
+            "user":user,
+            "cate":cate,
+            "category":category,
+            }
+            return render(request, "recommendations.html",context)
+        else:
+            cate = primary_subcategory.objects.all()
         
             
-        category = "All"
-        data4 = recommended_ones(request,category)
-        context = {
+            category = "All"
+            data4 = recommended_ones(request,category)
+            context = {
         "data4":data4,
         "cate":cate,
         "user":user,
         "category":category,
-        }
-        return render(request, "recommendations.html",context)
+            }
+            return render(request, "recommendations.html",context)
+    else:
+        return error_display(request)
 def recommended_ones(request , category):
-    user_id = user_model.objects.get(token = request.session["user_number"])
-    user_meta = views_recorder.objects.get(user = user_id)
+    try:
+        user_id = user_model.objects.get(token = request.session["user_number"])
+        user_meta = views_recorder.objects.get(user = user_id)
+    except:
+        return error_display(request)
     meta_data = user_meta.get_data()
     
     if category == "All":
@@ -998,6 +1027,7 @@ def recommended_ones(request , category):
             highest_giver = highest_ranker(highest[0])
             int1 = random.randint(0,1)
             categories.append((i[0] , highest_giver[int1]))
+        print(categories)
         data4 = []              
                     
         for _ in range(7):
@@ -1012,7 +1042,9 @@ def recommended_ones(request , category):
             )
     
     
-            data4.extend(list(filtered_data))      
+            data4.extend(list(filtered_data))    
+            #print(data4)
+        data4 = product_models.objects.all()    
         return data4 
     else:
         for i in meta_data:
@@ -1037,6 +1069,9 @@ def searchbar(request):
     if "user_number" in request.session:
         user = user_model.objects.get(token = request.session["user_number"])
         logged = 1
+    elif "business_token" in request.session:
+        user = business_model.objects.get(token = request.session["business_token"])
+        logged =1
     else:
         logged = 0
         user = ""
@@ -1276,5 +1311,150 @@ def prod_tracker(word):
             except business_model.DoesNotExist:    
                 pass
             pass
-    return business_var         
+    return business_var        
+def ci(request):
+    user = user_model.objects.get(token = request.session["user_number"])
+    if request.method=="POST":
+        r = request.POST
+        password = r.get("password")
+        name = r.get("username")
+        email = r.get("email")
+        real_email = user.email 
+        real_password = user.password 
+        real_name = user.name
+        if name!=real_name and password == real_password:
+            print(12)
+            user.name = name
+            user.save()
+            return JsonResponse({"redirect":1} , safe = False)
+        elif email!=real_email and password == real_password:
+            print(13)
+            request.session["new_email"] = email 
+            number = random.randint(4567 , 9999)
+            request.session["otp"] = number 
+            extra_var = "none"
+            Email(request , email , extra_var)
+            return JsonResponse({"email":email} , safe = False)
+            
+        elif password != real_password:
+            print(23)
+            request.session["new_password"] = password 
+            number = random.randint(4567 , 9999)
+            request.session["otp"] = number 
+            extra_var = "none"
+            Email(request , email , extra_var)
+            return JsonResponse({"email":email} , safe = False)
+        else:
+            return JsonResponse({"redirect":1} , safe = False)
+    else:
+        return homepage(request)
+def change_info(request):
+    if "user_number" in request.session:
+        user = user_model.objects.get(token = request.session["user_number"])
+        context = {
+        "user":user,
         
+        
+        }
+        return render(request , "change_info.html" ,context)
+    else:
+        return error_display(request)    
+def change_email_password(request):
+    user = user_model.objects.get(token = request.session["user_number"])
+    
+    if "new_email" in request.session:
+        user.email = request.session["new_email"]
+        request.session.pop("new_email" , None)
+        user.save()
+        return user_page(request)
+    elif "new_password" in request.session:
+        user.password = request.session["new_password"]
+        user.save()
+        request.session.pop("new_password" , None)
+        return user_page(request)
+    else:
+        return error_display(request)
+        
+def product_list(request):
+    if "business_token" in request.session:
+        business_got = business_model.objects.get(token = request.session["business_token"])
+        products = product_models.objects.filter(business_mdl = business_got)
+        context = {
+        "prods":products,
+        
+        
+        }
+        return render(request, "product_list.html" ,context)
+    else:
+        return error_display(request)
+        
+        
+def comments_page(request):
+    if "business_token" in request.session:
+        business_got = business_model.objects.get(token = request.session["business_token"])
+        commented = comments.objects.filter(business_mdl = business_got)
+        context={
+        "cmts":commented,
+        
+        }
+        return render(request, "comments.html" ,context)
+    else:
+        error_display(request)
+def promo_discount(request):
+    return render(request, "promo.html" ,context = {})    
+def variant_finder(id):
+    product = product_models.objects.get(token = id)
+    category,sub_category = product.category , product.sub_category
+    producted = product_models.objects.filter(category = category , sub_category = sub_category).order_by("-views")
+    return producted[:2]
+def rpf(id):
+    product = product_models.objects.get(token = id)
+    category,sub_category = product.category , product.sub_category 
+    products = product_models.objects.filter(category = category)
+    return products[:6]
+def product_page(request, id):
+    if product_models.objects.filter(token = id).exists():
+        
+        prod = product_models.objects.get(token = id)
+        variants = variant_finder(id)
+        cmted = 0
+        
+        comment = comments.objects.filter(product_id = prod)
+        related_product_finders = rpf(id)
+        if "user_number" in request.session:
+            user = user_model.objects.get(token = request.session["user_number"])
+            
+            cmted = 0
+            try:
+                if comments.objects.filter(user = user , product_id = prod):
+                    cmted = 1
+            except comments.DoesNotExist:
+                cmted = 0
+            
+        
+            
+            
+            context = {
+                "user":user , 
+                "rpf":related_product_finders,
+                "variants":variants,
+                "prod":prod,
+                "logged":1,
+                "comments":comment,
+                "cmted":cmted,
+                
+                }
+        else:
+            context = {
+            "cmted":cmted,
+            "comments":comment,
+            "logged":0,
+            "rpf":related_product_finders,
+                "variants":variants,
+            "prod":prod,
+            
+            
+            }
+        return render(request , "product.html" , context)
+    else:
+        return error_display(request)

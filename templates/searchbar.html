@@ -29,13 +29,36 @@ z-index:4;
 transform:scale(1);
 }
 .container_mb{
-width:100%;
+width:65vw;
 height:100%;
-display:flex;
+
 
 }
+.prod{
 
+width:30vw;
+height:40vh;
+background:rgba(255,255,255,0.05);
+border-radius:10px;
+padding:15px;
+display:block;
+color:white;
+margin-top:5vh;
+text-decoration:none;
+}
+img{
+width:25vw;
+height:30vh;
+
+}
+.p_prod{
+
+color:white;
+font-size:1.1rem;
+margin-top:2vh;
+}
 </style>
+<div class="mainbody">
 <form class="search_div">{% csrf_token %}
 <div class="icon_st"><i class="fa-solid fa-magnifying-glass"></i></div>
 <input type="text" placeholder = "What are you looking for......" name="search_item" id="search_input">
@@ -80,6 +103,7 @@ container_prod.innerHTML = "";
 
         // Create a new 'p' element
         var pTag = document.createElement('p');
+		pTag.className = "p_prod"
         pTag.textContent = productName;
 
         // Append 'img' and 'p' to the 'a' element
@@ -101,8 +125,8 @@ container_prod.innerHTML = "";
 
 
 <div class="mainbody">
-<p style="font-size:1.4rem;">Search</p>
-{{data}}
+<p style="font-size:1.4rem;">Top Results</p>
+<br>
 <div class="container_mb">
 
 
@@ -116,4 +140,5 @@ container_prod.innerHTML = "";
 
 
 
+</div>
 </div>

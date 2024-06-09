@@ -20,30 +20,8 @@ class user_model(models.Model):
     longitude = models.IntegerField(null=True)
 class business_trackrecord(models.Model):
     name = models.CharField(max_length = 20)
-class product_models(models.Model):
-    product_name = models.CharField(max_length = 200)
-    price = models.IntegerField(null=True)
-    description = models.TextField()
-    token = models.CharField(max_length = 100 , primary_key = True)
-    views = models.IntegerField(null=True)
-    #business_name = models.Foreignkey()
-    likes = models.IntegerField(null=True)
-    picture = models.ImageField(upload_to = "static/" , null = True)
-    price_range = models.CharField(null = True , max_length = 20)
-    category = models.CharField(max_length = 200)
-    sub_category = models.CharField(max_length = 200)
-    weight = models.IntegerField(null=True)
-    size = models.CharField(max_length = 100)
-    negotiable = models.BooleanField()
-   # varients = models.Foreignkey()#list of productid
-    #comments = models. list of comment id 
 
-class ratings(models.Model):
-    user = models.ForeignKey(user_model , on_delete = models.CASCADE)
-    product_id = models.ForeignKey(product_models , on_delete = models.CASCADE)
-    ratings = models.IntegerField(null=True)
-    datetime = models.DateTimeField(default = timezone.now)
-    
+
 
     
 class business_model(models.Model):
@@ -58,7 +36,7 @@ class business_model(models.Model):
     area_wise_views = models.TextField()#(area,views)
     reviews = models.IntegerField(null=True)
     avg_rating = models.IntegerField(null=True)
-    img = models.ImageField(upload_to = "static/" , null = True)
+    img = models.ImageField(upload_to = "static/" , null = True , default = "static/images/business.jpg")
     today_views = models.IntegerField(null=True)
     monthly_views = models.IntegerField(null=True)
     latitude = models.IntegerField(null=True)
@@ -89,6 +67,30 @@ class business_model(models.Model):
         self.mva = json.dumps(data)
     def get_mva_list(self):
         return json.loads(mva)
+class product_models(models.Model):
+    product_name = models.CharField(max_length = 200)
+    price = models.IntegerField(null=True)
+    description = models.TextField()
+    token = models.CharField(max_length = 100 , primary_key = True)
+    views = models.IntegerField(null=True)
+    business_mdl = models.ForeignKey(business_model , on_delete = models.CASCADE , null=True)
+    likes = models.IntegerField(null=True)
+    picture = models.ImageField(upload_to = "static/" , null = True , default ="static/images/product.jpg")
+    price_range = models.CharField(null = True , max_length = 20)
+    category = models.CharField(max_length = 200)
+    sub_category = models.CharField(max_length = 200)
+    weight = models.IntegerField(null=True)
+    size = models.CharField(max_length = 100)
+    negotiable = models.BooleanField()
+    images = models.ImageField(upload_to = 'static/' , null = True , default="staic/images/product.jpg")
+   # varients = models.Foreignkey()#list of productid
+    #comments = models. list of comment id 
+class ratings(models.Model):
+    user = models.ForeignKey(user_model , on_delete = models.CASCADE)
+    product_id = models.ForeignKey(product_models , on_delete = models.CASCADE)
+    ratings = models.IntegerField(null=True)
+    datetime = models.DateTimeField(default = timezone.now)
+            
 class category_saver(models.Model):
     category = models.CharField(max_length = 300)
     subcategory = models.TextField()

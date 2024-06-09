@@ -13,19 +13,21 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: black;
         }
         
         .container {
             text-align: center;
             padding: 20px;
             border-radius: 5px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: rgb(10,10,10);
+            box-shadow: 0 0 10px rgba(233, 233, 233, 0.1);
         }
         
         input[type="text"] {
             width: 5vw;
+			color:white;
+			background:black;
 			align-items:center;
 			text-align:center;
             padding: 10px;
@@ -52,7 +54,7 @@
 </head>
 <body>
     <div class="container">
-        <h2>Enter OTP</h2>
+        <h2 style="color:white;">Enter OTP</h2>
         <input type="text" class="otpInput" placeholder="X" maxlength="1">
         <input type="text" class="otpInput" placeholder="X" maxlength="1">
         <input type="text" class="otpInput" placeholder="X" maxlength="1">
@@ -78,10 +80,14 @@
             var isVerified = true; 
             }
             if (isVerified) {
-				
-      
+				var ps = parseInt("{{ps}}");
+				var em = parseInt("{{em}}");
+		         if (ps==1 || em==1){
+                var url="{% url 'cep' %}";
+				 }
+      else{
     var url = '{% url "actual" %}';
-    
+    }
     window.location.href = url;
 
 
