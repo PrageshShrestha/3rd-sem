@@ -37,7 +37,8 @@ from .models import (
     primary_subcategory,
     views_recorder,
     secondary_subcategory,
-    last_category
+    last_category,
+    bookmarked,
 )
 
 # Project-specific settings import
@@ -395,7 +396,11 @@ def homepage(request):
     category_db = primary_subcategory.objects.all()
     category = []
     category_count = 0
-    
+    season = [("Fans/AC","Sunscreen","Hydration water bottle","Picnics","Swimming","Sunglasses","Umbrella"),("woolensweater","Thermocoats","Gloves","Heater","Chiya/coffee","Lipbalm/moisturing cream"),("Umbrella" , "Raincoat" , "Dry Rack","Portable powerbank","Water proof outwears" , "Plastic holder")]
+    seasons = season[1]
+    best_rated=product_models.objects.all().order_by("-ratings_prod")[:4]
+    most_viewed_products = product_models.objects.all().order_by("-views")[:4]
+    ppr = product_models.objects.filter(category = "Games and Sports")
     if "business_token" in request.session:
         request.session["b/u"] = 1
     for i in category_db:
@@ -411,13 +416,20 @@ def homepage(request):
         "logged":1,
         "bu":1,
         "business":business,
+        "seasons":seasons,
+        "best_rated":best_rated,
+        "mvp":most_viewed_products,
+        "ppr":ppr,
         
         }
             return render(request , "homepage2.html" , context)
         else:
             context = {
         "logged":0,
-        
+        "seasons":seasons,
+        "best_rated":best_rated,
+        "mvp":most_viewed_products,
+        "ppr":ppr,
         
         }
             return render(request, "homepage2.html",context)
@@ -437,7 +449,10 @@ def homepage(request):
             'user': request.session['user_number'],
             'people':user,
             'data2':datas2,
-            
+            "seasons":seasons,
+            "best_rated":best_rated,
+            "ppr":ppr,
+        "mvp":most_viewed_products,
         }
         return render(request , 'homepage2.html' , context)
 def maps(request , mode):#loggged and located = 2 , logged = 1 ,unlogged = 0
@@ -815,17 +830,25 @@ def login(request):
 def business_page(request,token):
     if "business_token" in request.session:
         token = request.session["business_token"]
+        prod_busi = business_model.objects.get(token = token)
+        products = product_models.objects.filter(business_mdl = prod_busi)
+        leng = len(products)
         context = {
         "business":business_model.objects.get(token = token),
-        
-        
+        "b":1,
+        "products":products,
+        "l":leng,
         }
         return render(request,"business_page.html",context)
     elif business_model.objects.filter(token=token):
+        prod_busi = business_model.objects.get(token = token)
+        products = product_models.objects.filter(business_mdl = prod_busi)
+        leng = len(products)
         context = {
         
-        "business":business_model.objects.get(token = token)
-        
+        "business":business_model.objects.get(token = token),
+        "products":products,
+        "l":leng,
         }
         return render(request,"business_page.html",context)
     else:
@@ -837,32 +860,37 @@ def add_real_product(request):
         sub_cate = r.get("sub_cate")
         show = r.get("show")
         category = primary_subcategory.objects.get(name = cate)
-        if secondary_subcategory.objects.filter(ss_forekey = category.name).exists() and sub_cate == "none":
+        if secondary_subcategory.objects.filter(ss_forekey = category.name).exists() or sub_cate == "none":
             show = 0
         else:
             show = 1
         if show==0:
-        
+            sub_cate1_json = []
             category = primary_subcategory.objects.get(name = cate)
             sub_cate1 = secondary_subcategory.objects.filter(ss_forekey=category.name)
+            print(f"subcate is {sub_cate1}")
              
-            sub_cate1_json = serialize('json', sub_cate1)
-  
+            for i in sub_cate1:
+                sub_cate1_json.append(i.sub_name)
     
     # Construct the response data
             data = {
-            "category":category,
-        "sub_cate": sub_cate1,
+            "category":category.name,
+        "sub_cate": sub_cate1_json,
         "show": 1,
         
             }   
             return JsonResponse(data , safe = False)
         else:
+            item_names_ser = []
             category = primary_subcategory.objects.get(name = cate)
+            print(f"cate is {category}")
             item_names = last_category.objects.filter(lc_forekey = category.name)
-
-            item_names_ser = serialize('json', item_names)
+            for i in item_names:
+                item_names_ser.append(i.item_name)
+            
             sub = "ola"
+            print(item_names_ser)
             data = {
             "item_names":item_names_ser,
             "show":0,
@@ -944,13 +972,31 @@ def history_page(request):
         return render(request,"Myhistory.html" , context)
     else:
         return error_display(request)
+def remove_bookmark(request , id):
+    if "user_number" in request.session:
+        id = request.POST.get("id")
+        product_id = product_models.objects.get(token = id)
+        user = user_model.objects.get(token = request.session["user_number"])
+        get_book = bookmarked.objects.filter(product = product_id , user = user).delete()
+        return homepage(request)
+    else:
+        return error_display(request)
+def add_bookmark(request , id):
+    if "user_number" in request.session:
+        id = request.POST.get("id")
+        product_id = product_models.objects.get(token = id)
+        user = user_model.objects.get(token = request.session["user_number"])
+        get_book = bookmarked.objects.create(product = product_id , user = user)
+    else:
+        return error_display(request)
 def bookmarks(request):
     if "user_number" in request.session:
         user = request.session["user_number"]
         bookmarks = bookmarked.objects.filter(user = user)
         context = {
         "bookmarked":bookmarks,
-        
+        "logged":1,
+        "user":user,
         }
         return render(request,"mybookmarks.html" , context)
     else:
@@ -1013,8 +1059,8 @@ def recommended_ones(request , category):
         user_meta = views_recorder.objects.get(user = user_id)
     except:
         return error_display(request)
-    meta_data = user_meta.get_data()
-    
+    #meta_data = user_meta.get_data()
+    meta_data = [["Electronics", [["high", 100], ["affordable", 200]]]]
     if category == "All":
         categories = []
         for i in meta_data:
@@ -1047,17 +1093,19 @@ def recommended_ones(request , category):
         data4 = product_models.objects.all()    
         return data4 
     else:
+        print(category)
         for i in meta_data:
             if i[0]==category:
+                print("here")
                 data4  = []
                 for (price ,views) in i[1]:
-                    filtered_data = product_models.objects.filter(category = category , price_range = price)
-                    data4.append(filtered_data)
+                    filtered_data = product_models.objects.filter(category = category)
+                    data4.extend(list(filtered_data))
                 return data4 
             else:
                 data4  = []
                 for (price ,views) in i[1]:
-                    filtered_data = product_models.objects.filter(category = category , price_range = price)
+                    filtered_data = product_models.objects.filter(category = category)
                     data4.extend(list(filtered_data))
                 return data4 
 def searchbar(request):
@@ -1080,7 +1128,7 @@ def searchbar(request):
         query_set = r.get("query_string")
         
         data = string_taker(query_set , list_made)
-        
+        print(f"data is {data}")
         #business_id ,  product_id = sentence_seperator(data , list_made)
         for i in data:
             business_ids =  business_tracker(i)
@@ -1091,12 +1139,14 @@ def searchbar(request):
         #data = temporary_search_results(query_set)
         print(f"business_ids is {business_id}")
         print(f"product_id is {product_id}")
+        business_idu=[]
+        product_idu = []
         for j in business_id:
             try:
                 businessed = business_model.objects.get(token=j)
-                listed_busid = [businessed.token , businessed.name , businessed.avg_rating , businessed.category]
+                listed_busid = [businessed.token , businessed.name , businessed.avg_rating , businessed.img.url]
                 if not any(businessed.token == listed_busi[0] for listed_busi in business_id):
-                    business_id.append(listed_busid)
+                    business_idu.append(listed_busid)
             except business_model.DoesNotExist:
                 pass
         for k in product_id:
@@ -1104,14 +1154,15 @@ def searchbar(request):
                 producted = product_models.objects.get(token = k)
                 listed_prod = [producted.token , producted.product_name , producted.views , producted.picture.url]
                 if not any(producted.token == product[0] for product in product_id):
-                    product_id.append(listed_prod)
+                    product_idu.append(listed_prod)
             except product_models.DoesNotExist:
                 pass
         data1 = {
-            "prod":product_id[:5] , 
-            "busi":business_id[:5],
+            "prod":product_idu, 
+            "busi":business_idu,
 
             }
+        print(product_id)    
         return JsonResponse(data1,safe = False)
         
         
@@ -1381,6 +1432,7 @@ def product_list(request):
         products = product_models.objects.filter(business_mdl = business_got)
         context = {
         "prods":products,
+        "business":business_got,
         
         
         }
@@ -1456,5 +1508,16 @@ def product_page(request, id):
             
             }
         return render(request , "product.html" , context)
+    else:
+        return error_display(request)
+def edit_busi_prod(request, id):
+    return homepage(request)
+def delete_busi_prod(request , id):
+    if "business_token" in request.session:
+        busine = product_models.objects.get(token = id)
+        busine.delete()
+        token = request.session["business_token"]
+        return business_page(request,token)
+      
     else:
         return error_display(request)

@@ -73,6 +73,7 @@ class product_models(models.Model):
     description = models.TextField()
     token = models.CharField(max_length = 100 , primary_key = True)
     views = models.IntegerField(null=True)
+    ratings_prod = models.IntegerField(null=True , default = 5)
     business_mdl = models.ForeignKey(business_model , on_delete = models.CASCADE , null=True)
     likes = models.IntegerField(null=True)
     picture = models.ImageField(upload_to = "static/" , null = True , default ="static/images/product.jpg")
@@ -136,6 +137,12 @@ class area_data(models.Model):
                 if words == "_":
                     break 
                 char_ext+=words    
+
+
+
+
+
+
                 
 class categories_subcategories(models.Model):   
     category = models.CharField(max_length = 200)
@@ -163,7 +170,7 @@ class last_category(models.Model):
 
     item_name = models.CharField(max_length = 200)
 class bookmarked(models.Model):
-    token = models.CharField(max_length = 200)
+    
     user = models.ForeignKey(user_model , on_delete = models.CASCADE)
-    product = models.CharField(max_length = 20)
-    business = models.CharField(max_length = 20)
+    product = models.ForeignKey(product_models , on_delete = models.CASCADE)
+    

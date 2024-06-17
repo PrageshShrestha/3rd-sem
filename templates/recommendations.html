@@ -41,19 +41,19 @@ background:rgba(50,50,50,0.8);
 {% endif %}
 {% for cates in cate %}
 {% if category == cates.name %}
-<a href = "{% url 'recommendations' cates.name%}" style="background:white;color:black;">{{cates.name}}</a> 
+<a href = "{% url 'recommendations' cates.name %}" style="background:white;color:black;">{{cates.name}}</a> 
 
 {% else %}
-<a href = "{% url 'recommendations' cates.name%}">{{cates.name}}</a>
+<a href = "{% url 'recommendations' cates.name %}">{{cates.name}}</a>
 {% endif %}
 
 {% endfor %}
 </div>
 
-
+{% if data4 %}
 {% for products in data4 %}
 
-<a class="prod_class" href="{% url 'product' id=products.token %}">
+<a class="prod_class" >
 <div class="img_class">
 <img src="{{products.picture.url}}">
 
@@ -84,7 +84,11 @@ Rs.{{products.price}}
 
 
 {% endfor %}
+{% else %}
+<p style="text-align:center;">There is always more to explore </p>
 
+
+{% endif %}
 
 </div>
 <style>

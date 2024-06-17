@@ -70,22 +70,25 @@
         <style>
 		
             .mainbody1{
-			width:100vw;
+			width:98vw;
 			margin-left:0vw;
 			height:150vh;
+			color:white;
 			font-family:sans-serif;
 			overflow:hidden;
 			letter-spacing:1px;
-			
-background:rgba(240,240,240,0.6);			display:inline-flex;
+			background:rgba(20,20,20,0.6);	
+		display:inline-flex;
 			}
 			body{
-background:rgba(240,240,240,0.6);			
+			background:rgba(20,20,20,0.9);	
 			}
             .rightdiv{
                 width:25vw;
                 height:70vh;
-                background:white;
+              background-color: rgb(14, 16, 17);
+
+
                 padding:25px;
                 margin-left: 1vw;
                 margin-right: 1vw;
@@ -95,17 +98,20 @@ background:rgba(240,240,240,0.6);
             }
 
             .sauravchhaka{
-                width:70%;
-                display:inline-flex;
+                display: flex;
+    flex-flow: wrap;
+    gap: 8px;
+    overflow: hidden;
             }
 
             .sauravchhaka p{ 
-                margin-left :5px;
-                padding: 5px;
-				margin-top:1vh;
-				margin-bottom:1vh;
-				font-size:.8rem;
-                border: 1px inset orange;
+			min-width:0px;
+			font-size:.8rem;
+                  background-image: initial;
+    background-color: transparent;
+	padding:5px;
+    color: rgb(203, 197, 189);
+    box-shadow: rgb(197, 96, 0) 0px 0px 0px 1px inset;
 
 
             }
@@ -130,12 +136,14 @@ background:rgba(240,240,240,0.6);
             }
             .leftdiv{
                 width:30vw;
-                height:50vh;
-                background:white;
+                height:55vh;
+                 background-color: rgb(14, 16, 17);
                 padding:25px;
                 margin-left: 0vw;
                 margin-right: 0vw;
                 margin-top: 15vh;
+				
+
 
             }
             .gaysaurav{
@@ -168,7 +176,7 @@ width:30vw;
 display:inline-flex;
 align-items:center;
 text-align:center;
-color:rgba(0,0,0,0.7);
+color:white;
 }
 .right_div_first p{
 width:9vw;
@@ -178,29 +186,31 @@ width:9vw;
 width:100%;
 display:inline-flex;
 height:40vh;
-margin-top:-1vh;
+margin-top:5vh;
 padding:0;
 
 
 }
 .variants_cl{
-width:10vw;
+width:15vw;
 height:48vh;
-background:white;
+background:none;
 padding:10px;
 text-decoration:none;
 color:grey;
+border-radius:10px;
 border:.5px solid grey;
 transition:.5s;
 
 }
 .variants_cl:hover{
-border:1px solid black;
+background:black;
 
 }
 .variants_cl img{
-width:10vw;
+width:15vw;
 height:30vh;
+
 
 }
 #pd_desc{
@@ -208,6 +218,7 @@ width:100%;
 max-height:6vh;
 transition:.5s;
 min-height:6vh;
+margin-top:4vh;
 overflow:hidden;
 cursor:pointer;
 
@@ -215,24 +226,28 @@ cursor:pointer;
 
 }
 .variants_cli{
-width:18vw;
-height:48vh;
-background:white;
-padding:5px;
+width:12vw;
+height:38vh;
+background:rgba(40,40,40,0.6);
+padding:10px;
 text-decoration:none;
 color:grey;
+border-radius:10px;
 transition:.5s;
 overflow-x:hidden;
 overflow-y:auto;
+margin:10px;
 
 }
 .variants_cli:hover{
-transform:scale(1.1);
+transform:scale(1.02);
+background:rgba(40,40,40,0.3);
+
 
 }
 .variants_cli img{
-width:18vw;
-height:30vh;
+width:12vw;
+height:20vh;
 
 }
 .cmts{
@@ -249,17 +264,21 @@ width:100%;
 height:auto;
 
 }
+
 .rpl{
-width:29vw;
+width:32vw;
 height:60vh;
-overflow:hidden;
+overflow-x:hidden;
 box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 padding:20px;
 position:fixed;
 font-family:sans-serif;
+overflow-y:auto;
 top:15vh;
 left:66vw;
-background:white;
+
+
+   background-color: rgb(14, 16, 17);
 
 
 }
@@ -277,22 +296,22 @@ background:white;
 				{{prod.views}}
 				</p>
 				<p>
-				{{prod.business_mdl.name}}
+				{{prod.sub_category}}
 				</p>
 				</div>
-                <p style="font-size:2rem; margin-bottom:-3vh;color:grey;">
+                <p style="line-height: calc(1.55556);
+    font-family: NotoSansDisplay, NotoSansDisplay-fallback, Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0px;">
                     {{prod.product_name}}</p>
-                <p>{{prod.business_mdl.name}}</p>
+            
                 
                 <div class="sauravchhaka">
                     <p>
                         Vat Free
                         
                     </p>
-                    <p>
-                        Free Shipping
-                    
-                    </p>
+                  
                     <p>
                         OUTLET%
                     </p>
@@ -307,7 +326,7 @@ background:white;
 	   {% for i in variants %}
 	   <a href="{% url 'product' id=i.token %}" class="variants_cl">
 	  <img src="{{ i.picture.url}}" alt="{{i.product_name}}">
-	  <p style="font-size:1.2rem;">
+	  <p style="font-size:1rem;font-weight: 600;letter-spacing: 1px;color:white;">
 	  {{i.product_name}}
 	  </p>
 	  <p style="font-size:.8rem;color:orange;margin-top:-2vh;">Minimum price Rs.{{i.price}}</p>
@@ -414,7 +433,8 @@ background:white;
 			
 			<div class="rpl">
 			<p>Related Products </p>
-			<div style="">
+			<div style="display:flex;flex-wrap:wrap;width:31vw;min-height:100%;overflow-x:hidden;
+			overflow-y:auto;">
 			{% for i in rpf %}
 			<a href="{% url 'product' id=i.token %}" class="variants_cli">
 			 <img src="{{ i.picture.url}}" alt="{{i.product_name}}">

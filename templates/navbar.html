@@ -11,15 +11,188 @@
 
       <script src="https://kit.fontawesome.com/23cecef777.js" crossorigin="anonymous"></script>
 
-<style>
+
+
+<i class="fa-solid fa-bars" id="navbar_act"></i>
+<i class="fa-sharp fa-solid fa-arrow-left-long" id="cutmark"></i>
+<script>
+$(document).ready(function(){
+ function cutmark() {
+ 
+    $('.sidebar').css('margin-left', '-35vw');
+    $('#cutmark').css('display', 'none');
+    $('.mainbody').css('background', 'none');
+ 
+   
+  
+}
+$('#navbar_act').click(function() {
+    $('.mainbody').css('background', 'rgba(0,0,0,0.1)');
+    
+        $('.sidebar').css({'margin-left': '0vw'});
+   
+       
+  
+    $('#cutmark').css({'display': 'flex'});
+
+    timeoutVar = setTimeout(function() {
+        $(document).off("click").on('click', function(e) {
+            if (!$(e.target).closest('.sidebar').length && !$(e.target).closest("#navbar_act").length) {
+			
+                cutmark();
+               
+            }
+        });
+    }, 1000);
+
+    $('#cutmark').click(function() {
+        $('.mainbody').css('background', 'none');
+        $('#cutmark').css({'display': 'none'});
+        clearTimeout(timeoutVar);
+        setTimeout(function() {
+            cutmark();
+        }, 1000);
+    });
+});
+
+})
+
+
+</script>
+ <div class="sidebar">
+    <div class="logo">
+      <a href="{% url 'homepage' %}">
+        KhojauHub
+      </a>
+    </div>
+
+    <div class="navigation">
+      <ul>
+        <li>
+          <a href="{% url 'homepage' %}">
+            <span class="fa fa-home"></span>
+            <span>Home</span>
+          </a>
+        </li>
+
+        <li>
+		
+		  {% if logged == 0 %}
+          <a href="{% url 'maps' mode='0' %}">
+		  {% else %}
+		  <a href = "{% url 'maps' mode='2' %}">
+		  {% endif %}
+            <i class="fa-solid fa-location-dot"></i>
+            <span> Map</span>
+          </a>
+        </li>
+{% if logged != 0 %}
+       
+	
+	<li>
+          <a href="{% url 'Myhistory' %}">
+            <span class="fa fa-clock-rotate-left"></span>
+            <span>History</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="{% url 'top_picks' id='All' %}">
+            <i class="fa-solid fa-location-crosshairs"></i>
+            <span> Top picks near you</span>
+          </a>
+        </li>
+{% endif %}
+	<li>
+          <a href="{% url 'searchbar' %}">
+            <span class="fa-solid fas fa-magnifying-glass-plus"></span>
+            <span> Search Bar</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="{% url 'recommendations' 'All' %}">
+            <span class="fa fas fa-icons"></i></span>
+            <span>Recommended items</span>
+          </a>
+        </li>
+
+	<li>
+          <a href="#">
+            <span class="fa fas fa-pizza-slice"></i></span>
+            <span>Special offers</span>
+          </a>
+        </li>
+		{% if logged != 0%}
+<li>
+          <a href="#">
+           <i class="fa-solid fa-arrow-right-from-bracket" style="transform:rotate(180deg);margin-right:.8vw;"></i>
+            <a href = "{% url 'logout' %}">log Out</a>
+          </a>
+        </li>
+{% endif %}
+
+	
+      </ul>
+    </div>
+
+
+
+    <div class="policies">
+      <ul>
+        <li>
+          <a href="#">Cookies</a>
+        </li>
+        <li>
+          <a href="#">Privacy</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+<div class="topbar">
+      
+
+      <div class="navbar">
+	     
+	  {% if logged == 0 %}
+     
+        
+       
+            <a href="{% url 'signup' %}">Sign Up</a>
+	        
+       
+	<a href="{% url 'login' %}">
+       Log In
+	</a>
+	{% else %}
+	       {% if bu == 1 %}
+		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> Profile</a>
+
+			{% else %}
+			<a href="{% url 'user_page' %}"><i class="fa-solid fa-user"></i> Profile</a>
+
+			 {% endif %}
+	     <a href = "#"> <i class="fa-solid fa-globe"></i> Lan-en</a>
+	
+	{% endif %}
+	{{bu}}
+	
+      </div>
+
+	   </div>
+	   
+	   
+	   <style>
 * {
       padding: 0;
       margin: 0;
-	  
+	 
     }
+	
     body {
       background-color:black;
       font-family: 'Montserrat', sans-serif;
+	  overflow-y:scroll;
     }
 	::-webkit-scrollbar {
   width: 10px;
@@ -41,11 +214,17 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #0a0a0a; 
 }
-
+#cutmark{
+display:none;
+top:3vh;
+left:25vw;
+position:fixed;
+}
 .sidebar {
       position: fixed;
       left: 0;
       top: 0;
+	  transition:.7s;
       bottom: 0;
       width: 18vw;
       background-color: black;
@@ -65,6 +244,10 @@
 	text-decoration:none;
 	color:white;
 	
+	}
+	#navbar_act{
+	
+	display:none;
 	}
     .sidebar .navigation ul li a {
       color: grey;
@@ -160,147 +343,131 @@
       left: 20vw;
       position:fixed;
 	  top:12vh;
+	  padding-left:2vw;
 	  color:white;
 	  padding:2vw;
       width:75vw;
 	  background-color:rgba(70,70,79,0.2);
-	  min-height:200vh;
-	  overflow-y:scroll;
+	  height:78vh;
+	  overflow-x:hidden;
+	  overflow-y:auto;
+	  margin-bottom:10vh;
+	
 	  
 	  
 
 	  }
+@media screen and (max-width: 751px) {
+
+.sidebar{
+margin-left:-35vw;
+z-index:5;
+width:30vw;
+
+}
+
+#navbar_act{
+	
+	display:flex;
+	width:5vw;
+	height:5vw;
+	position:fixed;
+	background:none;
+	color:white;
+	padding:10px;
+	transform:scale(1.1);
+	top:3vh;
+	left:20vw;
+	z-index:5;
+	border-radius:5px;
+	
+	}
 
 
+.logo{
 
+position:fixed;
+top:4vh;
+left:2vw;
+z-index:7;
+}
+.mainbody{
+width:90vw;
+left:0vw;
+padding-left:5vw;
+
+
+}
+.spotify-playlists{
+width:95vw;
+overflow:hidden;
+
+
+}
+h2{
+width:80vw;
+
+
+}
+.list{
+width:90vw;
+}
+.caruousel{
+width:90vw;
+
+}
+.offer_container{
+min-width:90vw;
+max-width:90vw;
+
+}
+.carouselbuttons{
+width:90vw;
+padding-left:25vw;
+padding-right:30vw;
+margin-left:5vw;
+
+}
+.cb{
+width:10vw;
+margin-left:1vw;
+
+}
+
+.topbar .navbar{
+width:40vw;
+margin-left:60%;
+
+}
+
+ .topbar .navbar a{
+	text-decoration:none;
+	color:white;
+	font-size:1rem;
+	width:10vw;
+	display:flex;
+	border-radius:40px;
+	padding:10px;
+	margin-left:1vw;
+	transition:.6s;
+	align-items:center;
+	text-align:center;
+	
+	}
+
+	#map{
+	width:90vw;
+	left:5vw;
+	position:fixed;
+	top:15vh;
+	height:80vh;
+	
+	}
+	.spotify-playlists .list .item {
+	width:30vw;
+	
+	}
+	
+
+	
 </style>
-
-
-
-
- <div class="sidebar">
-    <div class="logo">
-      <a href="{% url 'homepage' %}">
-        KhojauHub
-      </a>
-    </div>
-
-    <div class="navigation">
-      <ul>
-        <li>
-          <a href="{% url 'homepage' %}">
-            <span class="fa fa-home"></span>
-            <span>Home</span>
-          </a>
-        </li>
-
-        <li>
-		
-		  {% if logged == 0 %}
-          <a href="{% url 'maps' mode='0' %}">
-		  {% else %}
-		  <a href = "{% url 'maps' mode='2' %}">
-		  {% endif %}
-            <i class="fa-solid fa-location-dot"></i>
-            <span> Map</span>
-          </a>
-        </li>
-{% if logged != 0 %}
-        <li>
-          <a href="{% url 'Mybookmarks' %}">
-            <span class="fa fa-bookmark"></span>
-            <span>Bookmark</span>
-          </a>
-        </li>
-	
-	<li>
-          <a href="{% url 'Myhistory' %}">
-            <span class="fa fa-clock-rotate-left"></span>
-            <span>History</span>
-          </a>
-        </li>
-
-	<li>
-          <a href="{% url 'top_picks' id='All' %}">
-            <i class="fa-solid fa-location-crosshairs"></i>
-            <span> Top picks near you</span>
-          </a>
-        </li>
-{% endif %}
-	<li>
-          <a href="{% url 'searchbar' %}">
-            <span class="fa-solid fas fa-magnifying-glass-plus"></span>
-            <span> Search Bar</span>
-          </a>
-        </li>
-
-	<li>
-          <a href="{% url 'recommendations' 'All' %}">
-            <span class="fa fas fa-icons"></i></span>
-            <span>Recommended items</span>
-          </a>
-        </li>
-
-	<li>
-          <a href="#">
-            <span class="fa fas fa-pizza-slice"></i></span>
-            <span>Special offers</span>
-          </a>
-        </li>
-		{% if logged != 0%}
-<li>
-          <a href="#">
-           <i class="fa-solid fa-arrow-right-from-bracket" style="transform:rotate(180deg);margin-right:.8vw;"></i>
-            <a href = "{% url 'logout' %}">log Out</a>
-          </a>
-        </li>
-{% endif %}
-
-	
-      </ul>
-    </div>
-
-
-
-    <div class="policies">
-      <ul>
-        <li>
-          <a href="#">Cookies</a>
-        </li>
-        <li>
-          <a href="#">Privacy</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-<div class="topbar">
-      
-
-      <div class="navbar">
-	     
-	  {% if logged == 0 %}
-     
-        
-       
-            <a href="{% url 'signup' %}">Sign Up</a>
-	        
-       
-	<a href="{% url 'login' %}">
-       Log In
-	</a>
-	{% else %}
-	       {% if bu == 1 %}
-		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> Profile</a>
-
-			{% else %}
-			<a href="{% url 'user_page' %}"><i class="fa-solid fa-user"></i> Profile</a>
-
-			 {% endif %}
-	     <a href = "#"> <i class="fa-solid fa-globe"></i> Lan-en</a>
-	
-	{% endif %}
-	{{bu}}
-	
-      </div>
-
-	   </div>

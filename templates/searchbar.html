@@ -36,7 +36,19 @@ height:100%;
 }
 .prod{
 
-width:30vw;
+width:45vw;
+height:32vh;
+background:rgba(255,255,255,0.05);
+border-radius:10px;
+padding:15px;
+display:flex;
+
+color:white;
+margin-top:5vh;
+text-decoration:none;
+}
+.busi{
+width:20vw;
 height:40vh;
 background:rgba(255,255,255,0.05);
 border-radius:10px;
@@ -47,7 +59,7 @@ margin-top:5vh;
 text-decoration:none;
 }
 img{
-width:25vw;
+width:10vw;
 height:30vh;
 
 }
@@ -56,6 +68,42 @@ height:30vh;
 color:white;
 font-size:1.1rem;
 margin-top:2vh;
+}
+.v_prod{
+color:white;
+font-size:1rem;
+margin-top:2vh;
+}
+.div_sec{
+width:15vw;
+height:30vh;
+padding:10px;
+}
+.price_sec{
+width:10vw;
+height:20vh;
+display:block;
+}
+.tit_sec{
+font-size:1.2rem;
+letter-spacing:2px;
+margin-bottom:4vh;
+}
+.cate_sec{
+letter-spacing:2px;
+margin-bottom:6vh;
+}
+.rate_sec{
+letter-spacing:3px;
+
+}
+.pri_sec{
+font-size:2rem;
+}
+.busi_sec{
+margin-top:3vh;
+color:grey;
+font-size:0.7rem;
 }
 </style>
 <div class="mainbody">
@@ -82,8 +130,9 @@ container_prod.innerHTML = "";
 	},
 	success: function(response) {
     var lengthed = response.prod.length;
+	var leng = response.busi.length;
     var container_prod = document.getElementsByClassName("container_mb")[0];
-
+	console.log(response , lengthed);
     for (var i = 0; i < lengthed; i++) {
         // Extract product details
         var token = response.prod[i][0];
@@ -103,6 +152,38 @@ container_prod.innerHTML = "";
 
         // Create a new 'p' element
         var pTag = document.createElement('p');
+		pTag.className = "p_prod";
+        pTag.textContent = productName;
+		
+
+        // Append 'img' and 'p' to the 'a' element
+        aTag.appendChild(imgTag);
+        
+		
+aTag.appendChild(pTag);
+
+        // Append 'a' to the container
+        container_prod.appendChild(aTag);
+    };
+	 for (var i = 0; i < leng; i++) {
+        // Extract product details
+        var token = response.busi[i][0];
+        var productName = response.busi[i][1];
+        var views = response.busi[i][2];
+        var imageUrl = response.busi[i][3];
+
+        // Create a new 'a' element
+        var aTag = document.createElement('a');
+        aTag.className = 'busi';
+        aTag.href = '#';  // Update this if you have a URL to link to
+
+        // Create a new 'img' element
+        var imgTag = document.createElement('img');
+        imgTag.src = imageUrl;
+        imgTag.alt = productName;  // Optional: Adding alt text
+
+        // Create a new 'p' element
+        var pTag = document.createElement('p');
 		pTag.className = "p_prod"
         pTag.textContent = productName;
 
@@ -113,6 +194,7 @@ container_prod.innerHTML = "";
         // Append 'a' to the container
         container_prod.appendChild(aTag);
     }
+	
 },
 
 	
@@ -128,7 +210,23 @@ container_prod.innerHTML = "";
 <p style="font-size:1.4rem;">Top Results</p>
 <br>
 <div class="container_mb">
+<a class="prod">
 
+<img src="">
+<div class="div_sec">
+<p class="tit_sec">Title</p>
+<p class="cate_sec">Category</p>
+
+<p class="rate_sec">Ratings</p>
+<p class="busi_sec">From Business</p>
+</div>
+
+<section class="price_sec">
+<p class="pri_sec">Price</p>
+
+</section>
+
+</a>
 
 
 </div>

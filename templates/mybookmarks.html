@@ -1,165 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+<body>
+{% include "navbar.html" %}
+<div class="mainbody">
+  <p style="font-size:1.4rem;">Bookmarked</p>
+  <p style="color:grey;font-size:.9rem;">{{user_id.email}}</p>
+  <br>
+ {% for i in bookmarked %}
+ <form class="product-card">{{csrf_token}}
+        <img src="{{i.product_id.picture.url}}" alt="Product" class="product-image">
+        <h2 class="product-name">{{i.product_id.product_name}}</h2>
+        <p class="product-description">{{i.product_id.description}}</p>
+        <a href="" class="product-link">Bookmarked</a>
+    </form>
 
-    <head>
+{% endfor %}
 
 
-        <meta charset="UTF-8">
-        <meta name=":viewport" content="width=device-width,initial scale=1.0">
-        <title>Khojauhub</title>
-        
-    </head>
+<script>
+$(document).ready(function() {
+    $('.product-link').on('click', function(event) {
+        event.preventDefault(); // Prevent the default action (navigation)
 
+        var token = $(this).data('token'); // Get the token from data attribute
+         // Get the URL from the href attribute
 
-    <style>
-        body {
-            font-family:Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+        $.ajax({
+            url: "{% url 'br' %}",
+			
+            type: 'POST',
+data:{
+"id":id,
+ 'csrfmiddlewaretoken': '{{csrf_token}}',
 
-        nav{
-            background-color: blue;
-            padding: 10px 0;
-        }
-
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        nav ul li{
-            display: inline;
-            margin:0 10px;
-        }
-         
-        nav ul li a{
-            color:beige;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .container{
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
-
-        h1 {
-            text-align: center;
-        }
-
-        .bookmark {
-            display: inline-flex;
-            margin-bottom: 20px;
-            border: 1px solid #615e5e;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .bookmark-img {
-            width: 150px;
-            margin-right: 20px;
-        }
-
-        .bookmark-img img {
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        .bookmark-details {
-            display:inline-flex;
-        }
-
-        .bookmark-details h2 {
-            margin-top: 0;
-            font-size: 20px;
-        }
-
-        .bookmark-details p {
-            margin-bottom: 10px;
-            color: #b30b0b;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: #1DB954;
-            color: #fff;
-            border: none;
-            padding: 8px 15px;
-            margin-right: 10px;
-            border-radius: 3px;
-            text-decoration: none;
-        }
-
-        .btn i {
-            margin-right: 5px;
-        }
-
-        .btn:hover {
-            background-color: #1ed760;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #f4f4f4;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+}			// or 'POST' depending on your server requirements
+            success: function(response) {
+                // Handle the response here
+                console('Request successful');
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here
+                console('Request failed: ' + error);
+            }
+        });
+    });
+});
 
 
 
-            
-  </style>
-  <body>
-
-         <!--Navigation Bar-->
-         <nav>
-            <ul>
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-            </ul>
-         </nav>
-
-         <!--Page Content-->
-           <div class="container">
-              <h1>My Bookmark</h1>
-			  {% for i in bookmarks %}
-                <div class="bookmark">
-                   <div class="bookmark-img">
-                      <img src="" alt="Bookmark 1 ">
-           </div>   
-
-         <div class="Bookmark-detail">
-          <h2>{{i.</h2>
-          <p> Description of the bookmark and items </p>
-          <a href="#" class="btn"><i class="fas fa-play"></i> Play</a>
-          <a href="#" class="btn"><i class="fas fa-times"></i> Remove</a>
-      </div>
-  </div>
-  {% endfor %}
-  <!-- Add more bookmarks as needed -->
+</script>
 </div>
 
-<!-- Footer -->
-<footer>
-  <p>&copy; bookmark page </p>
-</footer>
 </body>
+
+
+<style>
+
+
+
+.product-card {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-width: 300px;
+    text-align: center;
+}
+
+.product-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.product-name {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.product-description {
+    font-size: 1em;
+    margin: 10px 0 20px;
+    color: #b0b0b0;
+}
+
+.product-link {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #ffffff;
+    background-color: #6200ea;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.product-link:hover {
+    background-color: #3700b3;
+}
+
+
+
+
+
+</style>
 </html>

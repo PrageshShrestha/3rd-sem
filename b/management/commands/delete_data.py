@@ -11,8 +11,8 @@ from b.models import (
     business_model,
     primary_subcategory,
     secondary_subcategory,
-    last_category
-    
+    last_category,
+    bookmarked,
 )
 import random
 from datetime import datetime, timedelta
@@ -39,5 +39,6 @@ class Command(BaseCommand):
             primary_subcategory.objects.all().delete()
             secondary_subcategory.objects.all().delete()
             last_category.objects.all().delete()
+            bookmarked.objects.all().delete()
         dropping()    
         self.stdout.write(self.style.SUCCESS('Demo data thanosed successfully!'))

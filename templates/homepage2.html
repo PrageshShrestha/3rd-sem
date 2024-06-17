@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -10,21 +11,12 @@
       padding: 0;
       margin: 0;
     }
-    body {
-      background-color:black;
-      font-family: 'Montserrat', sans-serif;
-    }
+  
 
-     .main-container {
-      left: 20vw;
-      position:fixed;
-	  top:12vh;
-      width:80vw;
-	  height:88vh;
-
-	  }
+     
     .spotify-playlists {
-      padding: 20px 40px;
+      padding:0;
+	  margin-bottom:5vh;
     }
     .spotify-playlists h2 {
       color: #ffffff;
@@ -37,8 +29,8 @@
       overflow: hidden;
     }
     .spotify-playlists .list .item {
-      min-width: 140px;
-      width: 160px;
+      width: 16vw;
+     
       padding: 15px;
       background-color: #181818;
       border-radius: 6px;
@@ -49,9 +41,11 @@
       background-color: #252525;
     }
     .spotify-playlists .list .item img {
-      width: 100%;
+      width: 16vw;
+	  height:30vh;
       border-radius: 6px;
       margin-bottom: 10px;
+	  overflow:hidden;
     }
     .spotify-playlists .list .item .play {
       position: relative;
@@ -121,33 +115,159 @@
       border-radius: 40px;
       cursor: pointer;
     }
+
+    .caruousel {
+      width: 75vw;
+      height: 50vh;
+      margin-left: 0vw;
+      background: rgba(20, 20, 20, 0.6);
+      border-radius: 10px;
+      display: inline-flex;
+      
+      transition: 1s;
+    }
+    .offer_container {
+     
+      min-width: 75vw;
+      max-width: 75vw;
+      display: inline-flex;
+      overflow: hidden;
+      height: 100%;
+      padding-left: 0vw;
+	  z-index:-2;
+      background: blue;
+    }
+    .carouselbuttons {
+      width: 70vw;
+      margin-top: 5vh;
+      margin-bottom: 3vh;
+      display: inline-flex;
+      min-height: 2vh;
+      margin-left: 2vw;
+      align-items: center;
+      text-align: center;
+      padding-left: 27vw;
+      padding-right: 29vw;
+    }
+	.item_img{
+	width:14vw;
+	height:20vh;
+	}
+    .cb {
+      height: 2vh;
+      width: 5vw;
+      background: rgba(20, 20, 20, 0.6);
+      border-radius: 20px;
+     
+      cursor: pointer;
+      transition: 1s;
+    }
+    .cb:hover {
+      background: white;
+    }
+	.seasons{
+	width:70vw;
+	margin-top:4vh;
+	display:inline-flex;
+	align-items:center;
+	justify-content:space-between;
+	margin-bottom:2vh;
 	
+	}
+	.ahref{
+	padding:10px;
+	letter-spacing:1px;
+	word-spacing:1px;
+	border-radius:5px;
+	margin-left:10px;
+	color:white;
+	border:2px solid white;
+	text-decoration:none;
+	transition:.3s;
+	}
+	.ahref:hover{
+	color:yellow;
+	background:black;
+	border:2px solid black;
+	
+	
+	
+	
+	}
+	.seasons{
+	width:90vw;
+    padding-right:5vw;
+	justify-content:space-between;
+	
+	
+	
+	
+	}
+	.offer_container img{
+	height:100%;
+	width:100%;
+	}
   </style>
 </head>
 <body>
-{% include "navbar.html" %}
+  {% include "navbar.html" %}
+  
+  <div class="mainbody">
+    <div class="caruousel">
+      <div class="offer_container"><img src="{% static 'images/offer.jpg' %}"></div>
+      <div class="offer_container"><img src="{% static 'images/offer1.jpg' %}"></div>
+      <div class="offer_container"><img src="{% static 'images/offer2.jpg' %}"></div>
+    </div><br>
+    <div class="carouselbuttons">
+      <div class="cb" data-value="1"></div>
+      <div class="cb" data-value="2"></div>
+      <div class="cb" data-value="3"></div>
+    </div>
+  
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var carou_var = document.getElementsByClassName("caruousel")[0];
+  var cbElements = document.getElementsByClassName("cb");
+
+  function cc(number) {
+    var num = -75 * (number - 1);
+    carou_var.style.transform = "translateX(" + num + "vw)";
+    console.log("Carousel moved to:", num + "vw");
+  }
+
+  for (var i = 0; i < cbElements.length; i++) {
+    cbElements[i].addEventListener("click", function() {
+      var number = parseInt(this.dataset.value);
+      console.log("Button clicked:", number);
+      cc(number);
+    });
+  }
+});
+</script>
+
+
+
+  
  
-  <div class="main-container">
-    
 
     <div class="spotify-playlists">
-      <h2>KU foodlist</h2>
+      <h2>KU Foodlist</h2>
 
       <div class="list">
         <div class="item">
-          <img src="cmomo.jpg" />
+          <img src="{% static 'images/product.jpg' %}" />
           <div class="play">
-            <span class="fa fa-play"></span>
+           
           </div>
           <h4>Today's Top picks</h4>
           <p>C momo is the best you can get</p>
         </div>
 
-	<div class="list">
+
         <div class="item">
-          <img src="sekuwa.jpg" />
+          <img src="{% static 'images/product.jpg' %}" />
           <div class="play">
-            <span class="fa fa-play"></span>
+           
           </div>
           <h4>Today's Top picks</h4>
           <p>You can get the burning hot delicious sekuwa</p>
@@ -158,60 +278,157 @@
 
       </div>
     </div>
+	
+<div class="spotify-playlists">
+	<h2>Best rated</h2>
+	
+	<div class="list">
+	{% for i in best_rated %}
+	<div class="item">
+          <img src="{% static 'images/product.jpg' %}"  class="item_img" />
+          <div class="play">
+           
+          </div>
+          <p>{{i.category}}</p>
+          <p>{{i.product_name}}</p>
+        </div>
+	{% endfor %}
+	</div>
+	
+	</div>
+	
+		
+<div class="spotify-playlists">
+	<h2>Most viewed</h2>
+	
+	<div class="list">
+	{% for i in mvp %}
+	<div class="item">
+          <img src="{% static 'images/product.jpg' %}"  class="item_img" />
+          <div class="play">
+           
+          </div>
+          <p>{{i.views}} views</p>
+          <p>{{i.product_name}}</p>
+        </div>
+	{% endfor %}
+	</div>
+	
+	</div>
+	<h2>Player's Paradise</h2>
+	
+	
+	
+	
+	 <div class="spotify-playlists">
+      <h2>Brewerages</h2>
 
-    <div class="spotify-playlists">
-      <h2>KU stationery list</h2>
       <div class="list">
-        <!-- focus playlists items here -->
+        <div class="item">
+          <img src="{% static 'images/product.jpg' %}" />
+          <div class="play">
+           
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>C momo is the best you can get</p>
+        </div>
+
+	
+        <div class="item">
+          <img src="{% static 'images/product.jpg' %}" />
+          <div class="play">
+           
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+
+
+        <!-- other foodlist items here -->
+
       </div>
     </div>
-<div class="list">
-        <div class="item">
-          <img src="stationery.jpg" />
-          <div class="play">
-            <span class="fa fa-play"></span>
-          </div>
-          <h4>Today's Top picks</h4>
-          <p>You can get the burning hot delicious sekuwa</p>
-        </div>
-<div class="list">
-        <div class="item">
-          <img src="stationery.jpg" />
-          <div class="play">
-            <span class="fa fa-play"></span>
-          </div>
-          <h4>Today's Top picks</h4>
-          <p>You can get the burning hot delicious sekuwa</p>
-        </div>
+	
+	
+	 <div class="spotify-playlists">
+      <h2>Breakfast</h2>
 
-
-    <div class="spotify-playlists">
-      <h2>KU Game house list</h2>
       <div class="list">
-        <!-- mood playlists items here -->
-      </div>
-      <hr>
-    </div>
-<div class="list">
         <div class="item">
-          <img src="futsal.jpg" />
+          <img src="{% static 'images/product.jpg' %}" />
           <div class="play">
-            <span class="fa fa-play"></span>
+           
           </div>
           <h4>Today's Top picks</h4>
-          <p>Enjoy and win!</p>
+          <p>C momo is the best you can get</p>
         </div>
-<div class="list">
+
+	
         <div class="item">
-          <img src="pool.jpg" />
+          <img src="{% static 'images/product.jpg' %}" />
           <div class="play">
-            <span class="fa fa-play"></span>
+           
           </div>
           <h4>Today's Top picks</h4>
           <p>You can get the burning hot delicious sekuwa</p>
         </div>
 
 
+        <!-- other foodlist items here -->
+
+      </div>
+    </div>
+	
+	 <div class="spotify-playlists">
+      <h2>Tuition</h2>
+
+      <div class="list">
+        <div class="item">
+          <img src="{% static 'images/demo.jpg' %}" />
+          <div class="play">
+           
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>C momo is the best you can get</p>
+        </div>
+
+	
+        <div class="item">
+          <img src="{% static 'images/product.jpg' %}" />
+          <div class="play">
+           
+          </div>
+          <h4>Today's Top picks</h4>
+          <p>You can get the burning hot delicious sekuwa</p>
+        </div>
+
+
+        <!-- other foodlist items here -->
+
+      </div>
+    </div>
+	
+	
+	
+	
+	<h2>Business in :</h2>
+	
+	
+	
+	
+	
+	<h2>Suitable for this Season</h2>
+<div class="seasons">
+{% for i in seasons %}
+<a href="" class="ahref">
+{{i}}
+</a>
+
+{% endfor %}
+
+
+</div>
+ 
 
 </body>
 </html>

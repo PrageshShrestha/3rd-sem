@@ -14,7 +14,8 @@ from b.models import (
     business_trackrecord,
     primary_subcategory,
     secondary_subcategory,
-    last_category
+    last_category,
+    bookmarked,
 )
 import random
 from datetime import datetime, timedelta
@@ -83,37 +84,32 @@ class Command(BaseCommand):
             # Electronics
            
    # Electronics
-            primary_obj_electronics = primary_subcategory.objects.create(name="Electronics")
+            primary_obj_electronics = primary_subcategory.objects.create(name="Games and Sports")
 
-            secondary_obj_smartphones = secondary_subcategory.objects.create(ss_forekey="Electronics", sub_name="Smartphones")
-            last_category.objects.create(lc_forekey="Smartphones", item_name="iPhone 13 Pro Max")
-            last_category.objects.create(lc_forekey="Smartphones", item_name="Samsung Galaxy S21 Ultra")
-            last_category.objects.create(lc_forekey="Smartphones", item_name="Google Pixel 6 Pro")
-            last_category.objects.create(lc_forekey="Smartphones", item_name="OnePlus 9 Pro")
-            last_category.objects.create(lc_forekey="Smartphones", item_name="Xiaomi Mi 11 Ultra")
+            secondary_obj_smartphones = secondary_subcategory.objects.create(ss_forekey="Games and Sports", sub_name="Indoor")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Futsal")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Fussball")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Carrom")
+            last_category.objects.create(lc_forekey="Indoor", item_name="E-football")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Pool and snooker")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Voltaball")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Gym")
+            last_category.objects.create(lc_forekey="Indoor", item_name="Zumba")
            
 
-            secondary_obj_laptops = secondary_subcategory.objects.create(ss_forekey=primary_obj_electronics, sub_name="Laptops")
-            last_category.objects.create(lc_forekey=secondary_obj_laptops, item_name="Generic Laptop 1")
-            last_category.objects.create(lc_forekey=secondary_obj_laptops, item_name="Generic Laptop 2")
+            secondary_obj_laptops = secondary_subcategory.objects.create(ss_forekey="Games and Sports", sub_name="Outdoor")
+            last_category.objects.create(lc_forekey="Outdoor", item_name="KU football ground")
+            last_category.objects.create(lc_forekey="Outdoor", item_name="Swimming")
+            last_category.objects.create(lc_forekey="Outdoor", item_name="Badminton")
+            last_category.objects.create(lc_forekey="Outdoor", item_name="Volleyball")
 
-            secondary_obj_tablets = secondary_subcategory.objects.create(ss_forekey=primary_obj_electronics, sub_name="Tablets")
-            last_category.objects.create(lc_forekey=secondary_obj_tablets, item_name="Generic Tablet 1")
-            last_category.objects.create(lc_forekey=secondary_obj_tablets, item_name="Generic Tablet 2")
 
-            secondary_obj_headphones = secondary_subcategory.objects.create(ss_forekey=primary_obj_electronics, sub_name="Headphones")
-            last_category.objects.create(lc_forekey=secondary_obj_headphones, item_name="Generic Headphones 1")
-            last_category.objects.create(lc_forekey=secondary_obj_headphones, item_name="Generic Headphones 2")
 
-            secondary_obj_cameras = secondary_subcategory.objects.create(ss_forekey=primary_obj_electronics, sub_name="Cameras")
-            last_category.objects.create(lc_forekey=secondary_obj_cameras, item_name="Generic Camera 1")
-            last_category.objects.create(lc_forekey=secondary_obj_cameras, item_name="Generic Camera 2")
 
-   # Clothing
-            primary_obj_clothing = primary_subcategory.objects.create(name="Clothing")
+            primary_obj_clothing = primary_subcategory.objects.create(name="Stationary")
 
-            secondary_obj_tshirts = secondary_subcategory.objects.create(ss_forekey=primary_obj_clothing, sub_name="T-shirts")
-            last_category.objects.create(lc_forekey=secondary_obj_tshirts, item_name="Generic T-shirt 1")
+            secondary_obj_tshirts = secondary_subcategory.objects.create(ss_forekey="Stationary", sub_name="Pens")
+            last_category.objects.create(lc_forekey="Pens", item_name="")
             last_category.objects.create(lc_forekey=secondary_obj_tshirts, item_name="Generic T-shirt 2")
 
             secondary_obj_dresses = secondary_subcategory.objects.create(ss_forekey=primary_obj_clothing, sub_name="Dresses")
@@ -340,7 +336,18 @@ class Command(BaseCommand):
                 if 0 <= index < 26:
                     counts[index] += 1
 
-            return counts            
+            return counts     
+        def bookmark_saver():
+            products = product_models.objects.all()
+            user = user_model.objects.all()
+            for _ in range(100):
+                bookmark_saver1 = bookmarked.objects.create(
+                user = random.choice(user) , 
+                product = random.choice(products)
+            
+            
+                )
+            
         def list_maker_func():
             result_list = []
 
@@ -381,7 +388,7 @@ class Command(BaseCommand):
             create_ratings()
             
             create_history()
-            
+            bookmark_saver()
             create_area_data()
             list_maker_func()
 

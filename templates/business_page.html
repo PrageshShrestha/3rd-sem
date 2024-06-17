@@ -18,7 +18,9 @@
         font-family: sans-serif;
 	
     }
+.mainbody{
 
+}
     .bt-1 {
         width: 60vw;
         height: 40vh;
@@ -129,8 +131,9 @@
         width: 32vw;
         height: 100vh;
         left: 65vw;
-        top: 100vh;
+        top: 12vh;
         overflow-y: scroll;
+		background:black;
 
     }
 
@@ -200,21 +203,21 @@
         justify-content: space-between;
     }
 
-    #menu_type a {
+    #menu_type p {
 
         text-decoration: none;
-        padding-left: 5px;
-        padding-right: 5px;
-        border-radius: blue;
+        
+        
         border-radius: 5px;
         color: white;
-        margin-left: 4px;
-        margin-top: 8px;
-        background: blue;
+       
+        background: none;
+		padding:4px;
         transition: .2s;
+		border:2px inset white;
     }
 
-    #menu_type a:hover {
+    #menu_type p:hover {
         transform: scale(1.05);
 
     }
@@ -295,6 +298,17 @@
 
         background: rgb(194, 194, 216);
     }
+	#btn_show{
+	position:fixed;
+	background:none;
+	border:1px solid white;
+	border-radius:5px;
+	padding:10px;
+	color:white;
+	left:25vw;
+	top:14vh;
+	cursor:pointer;
+	}
 
     .addition {
 
@@ -418,8 +432,12 @@ width:96%;
         <div style="margin-left:1vw;">Edit your Menu </div><br>
         <div id="i_childs">
 
-            <div>
-
+            <div style="margin-bottom:4vh;">
+			{% for i in products %}
+			<p>{{i.product_name}}</p>
+			
+			
+			{% endfor %}
 
 
             </div>
@@ -532,11 +550,16 @@ width:96%;
         <div class="content-bt-2">
             <div style="display:inline-flex;width:100%;">
                 <p style="font-size:1.2rem;">Menu</p>
-                <p style="font-size:.9rem;color:grey;">(29)</p>
+                <p style="font-size:.9rem;color:grey;">{{l}}</p>
+				{% if b %}
                 <p id="menu_editor" style="margin-left:85%;color:blue;text-decoration:underline;cursor:pointer;">Edit
-                </p>
+                </p>{% endif %}
             </div>
             <div id="menu_type">
+
+{% for i in products %}
+<p>{{i.product_name}}</p>
+{% endfor %}
 
 
 
@@ -682,7 +705,7 @@ width:96%;
    
 
 </div>
-
+<p id = "btn_show"> More</p>
 
 
 
@@ -711,23 +734,7 @@ width:96%;
         i_childs.appendChild(app2);
 
 
-        var app3 = document.createElement("input");
-        app3.placeholder = "Search your menu";
-        app3.classList.add("search_menu");
-        i_childs.appendChild(app3);
-        for (var i = 0; i < l; i++) {
-            var app = document.createElement("a");
-            // You can set an actual href link if you want
-            app.href = "#"; // Keep it '#' if you don't have an actual link
-            app.innerText = valued_menu[i];
-            // Append the new anchor element to the `menu_type` element
-            variable_class.appendChild(app);
-            var app2 = document.createElement("p");
-            app2.innerText = valued_menu[i];
-            var i_childs = document.getElementById("i_childs");
-            i_childs.appendChild(app2);
-        }
-
+       
 
         var v = 0;
         var parent_container = document.getElementsByClassName("sliding_container")[0];
@@ -790,8 +797,20 @@ width:96%;
         });
 
 
+var clicks = document.getElementById("btn_show");
+var abc = document.getElementsByClassName("absolute-class")[0];
+var yu = 0;
+clicks.addEventListener("click", function (event) {
+if (yu==0){
+abc.style.display = "block";
+yu=1;
 
-
+}
+else{
+abc.style.display = "none";
+yu= 0;
+}
+});
 
 
 

@@ -1,66 +1,140 @@
 <div class="container">
-{% for i in prods %}
-<a href="{% url 'product' i.token %}" class="prod_a">
+    {% for i in prods %}
+    <div href="{% url 'product' i.token %}" class="prod_a">
+        <img src="{{i.picture.url}}" alt="{{i.product_name}}" class="prod_img">
+        
+            <p>{{i.product_name}}</p>
+            <p>{{i.category}}</p>
+            <p>{{i.sub_category}}</p>
+            <p>${{i.price}}</p>
+      
+     
+            <a href="{% url 'edits' i.token %}" class="edit_btn">Edit</a>
+            <a href="{% url 'delete' i.token %}" class="delete_btn">Delete</a>
+     
+    </div>
+    {% endfor %}
+</div>
+<div id="nav_add">
+<h1 style="font-size:3rem;">Khojauhub</h1>
+<br>
+<br>
+<div class='nvb_b'>
+<div class='nvb a'><a href="{% url 'business_profile' business.token %}">
+Homepage</a>
+</div>
+<div class='nvb b' > <a href="{% url 'product_list' %}">
+Product List</a>
+</div>
 
-<img src="{{i.picture.url}}" alt="{{i.product_name}}">
-
-
-
-<div class="prod_b">
-{{i.product_name}}<br>
-{{i.category}}<br>
-{{i.sub_category}}<br>
-{{i.price}}<br>
-
+<div class='nvb d' ><a href = "{% url 'comments' %}">
+Comments</a>
+</div>
+<div class='nvb e' <a href="{% url 'promo' %}">
+Promotions / discounts</a>
+</div>
 
 </div>
 
 
-
-
-
-
-</a>
-
-
-
-
-
-{% endfor %}
-
 </div>
-
 <style>
+*{
+padding:0;
+margin:0;
+}
+#nav_add{
+width:20vw;
+top:1vw;
+right:1vw;
+text-align:center;
+align-items:center;
+position:fixed;
+background:rgba(0,0,0,1);
+height:96vh;
+border-radius:20px;
+padding:2vw;
+border:1px inset rgba(0,0,0,0.2);
+color:white;
+
+}
+
+.nvb_b{
+width:80%;
+align-items:left;
+padding-left:10%;
+text-align:left;
+color:grey;
+display:inline-block;
+font-family:sans-serif;
+cursor:pointer;
+}
+.nvb:hover{
+text-decoration:none;
+
+color:white;
+background:rgb(50,50,50);
+}
+.nvb a{
+text-decoration:none;
+color:grey;
+}
+.nvb a:hover{
+color:white;
+}
+.nvb{
+margin-bottom:3vh;
+transition:0.5s;
+padding:1vw 2vw;
+border-radius:10px 20px 20px 10px;
+
+}
+.md{
+letter-spacing:1px;
+width:35vw;
+min-height:100vh;
+max-height:140vh;
+display:block;
+border:0px inset grey;
+padding:10px;
+padding-left:20px;
+transition:1s ease-in-out;
+background:rgb(25, 25, 25);
+}
 .container{
-width:100vw;
-height:100vh;
-overflow:auto;
+width:75vw;
+height:95vh;
+overflow-x:hidden;
+overflow-y:auto;
+padding-top:5vh;
 background:black;
+font-family:sans-serif;
 
 }
 .prod_a{
-width:40vw;
+width:60vw;
 height:10vh;
-margin-left:30vw;
-background:rgba(255,255,255,0.2);
-border-radius:20px;
+margin-left:5vw;
+background:rgba(100,100,100,0.2);
+border-radius:5px;
 color:white;
 text-decoration:none;
 padding:30px;
 display:inline-flex;
 margin-bottom:5vh;
+justify-content:space-between;
 }
 .prod_a img{
-width:8vw;
+width:6vw;
 height:9vh;
 
 }
-.prod_b{
-letter-spacing:1px;
-word-spacing:1px;
-margin-left:4vw;
-
-
+p{
+margin-top:2vh;
+}
+a{
+margin-top:2vh;
+color:white;
 }
 
 </style>

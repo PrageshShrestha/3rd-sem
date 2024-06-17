@@ -1,4 +1,57 @@
-{% include "navbar.html" %}
+
+
+
+<div class="mainbody">
+<p style="font-size:1.4rem;">Top picks</p>
+{% if address == 1 %}
+<div style="color:white;">
+<a href = "{% url 'maps' mode='1' %}" style = "color:white;">You have not added your address. Click here to add your address.</a>
+</div>
+{% else %}
+<div style="display:inline-flex;">
+<p style="font-size:1.2rem; margin-right:2vw;">{{user.area_code}}</p>
+<a href = "{% url 'maps' mode='1' %}" style = "color:white;">Change/Add</a>
+
+</div>
+{% endif %}
+
+
+<div id="form_factor">
+
+{% for key , value in dat_cat_name.items %}
+{% if current == value %}
+<a href = "{% url 'top_picks' value %}" style="background:white;color:black;"><strong>{{value}}</strong></a>
+{% else %}
+<a href = "{% url 'top_picks' value %}">{{value}}</a>
+
+{% endif %}
+{% endfor %}
+</div>
+<div class = "prod_busi">
+<div class="busi">
+{% for i in data_cat %}
+<a href = "{% url 'business_profile' i.token %}" style = "" class="busi_picks">
+<!-- for image -->
+<div class = "image">
+<img src ="{{i.img.url}}">
+</div><br>
+<p>{{i.name}}</p>
+<div style="display:flex;font-size:.9rem;"><p style="color:grey;">{{i.category}} . </p>  {{i.avg_ratings}} <i class="fa-regular fa-star"></i> . {{i.monthly_views}} <i class="fa-regular fa-eye"></i></div>
+
+
+
+
+</a>
+
+{% endfor %}
+
+
+</div>
+
+
+</div>
+
+</div>
 <style>
 
 
@@ -56,9 +109,9 @@ background:rgba(255,255,255,.1);
 }
 .busi{
 width:70vw;
-min-height:40vh;
+height:60vh;
 padding:10px;
-
+margin-top:5vh;
 display:inline-flex;
 flex-wrap:wrap;
 overflow-y:auto;
@@ -66,61 +119,15 @@ overflow-y:auto;
 }
 .prod_busi{
 width:75vw;
-height:118vh;
+height:68vh;
 overflow-y:auto;
-margin-bottom:40vh;
+
 
 
 }
+
+	
+
+
 </style>
-<div class="mainbody">
-<p style="font-size:1.4rem;">Top picks</p>
-{% if address == 1 %}
-<div style="color:white;">
-<a href = "{% url 'maps' mode='1' %}" style = "color:white;">You have not added your address. Click here to add your address.</a>
-</div>
-{% else %}
-<div style="display:inline-flex;">
-<p style="font-size:1.2rem; margin-right:2vw;">{{user.area_code}}</p>
-<a href = "{% url 'maps' mode='1' %}" style = "color:white;">Change/Add</a>
-
-</div>
-{% endif %}
-
-
-<div id="form_factor">
-
-{% for key , value in dat_cat_name.items %}
-{% if current == value %}
-<a href = "{% url 'top_picks' value %}" style="background:white;color:black;"><strong>{{value}}</strong></a>
-{% else %}
-<a href = "{% url 'top_picks' value %}">{{value}}</a>
-
-{% endif %}
-{% endfor %}
-</div>
-<div class = "prod_busi">
-<div class="busi">
-{% for i in data_cat %}
-<a href = "{% url 'business_profile' i.token %}" style = "" class="busi_picks">
-<!-- for image -->
-<div class = "image">
-<img src ="{{i.img.url}}">
-</div><br>
-<p>{{i.name}}</p>
-<div style="display:flex;font-size:.9rem;"><p style="color:grey;">{{i.category}} . </p>  {{i.avg_ratings}} <i class="fa-regular fa-star"></i> . {{i.monthly_views}} <i class="fa-regular fa-eye"></i></div>
-
-
-
-
-</a>
-
-{% endfor %}
-
-
-</div>
-
-
-</div>
-
-</div>
+{% include "navbar.html" %}

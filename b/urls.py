@@ -24,6 +24,8 @@ urlpatterns = [
    path("add_product/<str:token>" , views.add_product , name = "add_product"),
    path("Myhistory" , views.history_page , name="Myhistory"),
    path("Mybookmarks",views.bookmarks , name = "Mybookmarks"),
+   path("br" , views.remove_bookmark , name="br"),
+   path("add_bookmark/<str:id>" , views.add_bookmark , name="ab"),
    path("add_real_product" , views.add_real_product , name = "add_real_product"),
    path("logout" , views.logout , name = "logout"),
    path("recommendations/<str:category>",views.recommendations ,name = "recommendations"),
@@ -34,4 +36,6 @@ urlpatterns = [
    path("comments" , views.comments_page , name = "comments"),
    path("promo" , views.promo_discount , name="promo"),
    path("product/<str:id>" , views.product_page , name="product"),
+   path("edit_busi_prod/<str:id>" , views.edit_busi_prod , name="edits"),
+   path("del_busi_prod/<str:id>" , views.delete_busi_prod , name = "delete"),
 ]
