@@ -1,4 +1,4 @@
-
+{% load static %}
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -62,9 +62,16 @@ $('#navbar_act').click(function() {
  <div class="sidebar">
     <div class="logo">
       <a href="{% url 'homepage' %}">
-        KhojauHub
+        <img src="{% static 'images/logo.jpg' %}" alt="logo not found">
       </a>
     </div>
+	<style>
+	
+	.logo img{
+	width:16vw;
+	height:10vh;
+	}
+	</style>
 
     <div class="navigation">
       <ul>
@@ -166,7 +173,8 @@ $('#navbar_act').click(function() {
 	</a>
 	{% else %}
 	       {% if bu == 1 %}
-		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> Profile</a>
+		   
+		   	<a href="{% url 'business_profile' business.token %}"><i class="fa-solid fa-user"></i> {{business.name}}</a>
 
 			{% else %}
 			<a href="{% url 'user_page' %}"><i class="fa-solid fa-user"></i> Profile</a>
@@ -175,7 +183,7 @@ $('#navbar_act').click(function() {
 	     <a href = "#"> <i class="fa-solid fa-globe"></i> Lan-en</a>
 	
 	{% endif %}
-	{{bu}}
+	
 	
       </div>
 

@@ -53,7 +53,7 @@ background:rgba(50,50,50,0.8);
 {% if data4 %}
 {% for products in data4 %}
 
-<a class="prod_class" >
+<a class="prod_class" href="{% url 'product' products.token %}" >
 <div class="img_class">
 <img src="{{products.picture.url}}">
 
@@ -69,9 +69,9 @@ background:rgba(50,50,50,0.8);
 
 
 </div>
-<div class="views_class">
-{{products.views}}
-
+<div class="views_class" style="display:inline-flex;">
+{{products.views}}  
+<i class="fa-regular fa-eye" style="color:grey;margin-left:1vw;"></i>
 
 </div>
 <div class="price_class">

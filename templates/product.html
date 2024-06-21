@@ -1,4 +1,6 @@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
    <style>
         body {
@@ -18,7 +20,18 @@
             left: 0;
             z-index: 1000;
         }
-
+  .star-rating {
+            font-size: 1.2em;
+            color: gray;
+			margin-bottom:3vh;
+            cursor: pointer;
+        }
+        .star-rating .fa-star {
+            margin: 0 5px;
+        }
+        .star-rating .fa-star.checked {
+            color: gold;
+        }
         .navbar a {
             color: white;
             text-decoration: none;
@@ -70,18 +83,20 @@
         <style>
 		
             .mainbody1{
-			width:98vw;
+			width:98.89vw;
 			margin-left:0vw;
 			height:150vh;
 			color:white;
 			font-family:sans-serif;
 			overflow:hidden;
 			letter-spacing:1px;
-			background:rgba(20,20,20,0.6);	
+			color:white;
+			background:rgba(20,20,20,0.9);	
 		display:inline-flex;
 			}
 			body{
 			background:rgba(20,20,20,0.9);	
+			color:white;
 			}
             .rightdiv{
                 width:25vw;
@@ -157,7 +172,7 @@
             .messi{
                 display:inline-flex; 
                 width:100%;
-                color:black;
+                color:white;
 				margin-top:-1vh;
                 }
 
@@ -165,10 +180,67 @@
 				margin-top:-2vh;
                 display:inline-flex; 
                 width:100%;
-                color:black;
+                color:white;
 
                 }
+/* CSS */
+.button-56 {
+  align-items: center;
+  background-color: #fee6e3;
+  border: 2px solid #111;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #111;
+  cursor: pointer;
+  display: flex;
+  font-family: Inter,sans-serif;
+  font-size: 16px;
+  height: 48px;
+  justify-content: center;
+  line-height: 24px;
+  max-width: 100%;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
 
+.button-56:after {
+  background-color: #111;
+  border-radius: 8px;
+  content: "";
+  display: block;
+  height: 48px;
+  left: 0;
+  width: 100%;
+  position: absolute;
+  top: -2px;
+  transform: translate(8px, 8px);
+  transition: transform .2s ease-out;
+  z-index: -1;
+}
+
+.button-56:hover:after {
+  transform: translate(0, 0);
+}
+
+.button-56:active {
+  background-color: #ffdeda;
+  outline: 0;
+}
+
+.button-56:hover {
+  outline: 0;
+}
+
+@media (min-width: 768px) {
+  .button-56 {
+    padding: 0 40px;
+  }
+}
 .right_div_first{
 margin-bottom:-4vh;
 
@@ -282,6 +354,26 @@ left:66vw;
 
 
 }
+.review{
+width:31vw;
+background:rgba(20,20,20,0.9);
+height:auto;
+padding:20px;
+border-radius:10px;
+margin-left:-2vw;
+
+}
+.cmt_prod{
+height:15vh;
+background:black;
+color:white;
+width:30vw;
+outline:none;
+border:1px solid white;
+margin-bottom:4vh;
+padding:10px;
+
+}
         </style>
 
         <div class="mainbody1">
@@ -289,11 +381,11 @@ left:66vw;
                 <div class="right_div_first">
 				<p>
 				
-				{{prod.likes}}
+				{{prod.likes}} likes
 				</p>
 				
 				<p>
-				{{prod.views}}
+				{{prod.views}} views
 				</p>
 				<p>
 				{{prod.sub_category}}
@@ -403,11 +495,22 @@ left:66vw;
 				
 				
 				</div>
-				{% if cmted == 0 %}
-				<div class="review">
-				
-				
-				</div>
+				{% if cmted == 1 %}
+				<form class="review">{{csrf_token}}
+				<p>Add your reviews on {{prod.product_name}}</p>
+				<div class="star-rating">
+        <i class="fa fa-star" data-value="1"></i>
+        <i class="fa fa-star" data-value="2"></i>
+        <i class="fa fa-star" data-value="3"></i>
+        <i class="fa fa-star" data-value="4"></i>
+        <i class="fa fa-star" data-value="5"></i>
+    </div>
+				<textarea placeholder="Enter comments here.........." id="cmt" class="cmt_prod"></textarea>
+				<!-- HTML !-->
+<button class="button-56" role="button">Send</button>
+
+
+				</form>
 				{% endif %}
 				<div class="cmt_sec">
 				<p style="font-size:1.2rem;">Comments</p>
@@ -423,7 +526,49 @@ left:66vw;
 				
 				</div>
             </div>
+<script>
+$(document).ready(function() {
+    var rating = 0;  // Initialize rating variable
 
+    // Star rating click event
+    $('.star-rating .fa-star').on('click', function() {
+        rating = $(this).data('value');  // Update the rating variable
+
+        $('.star-rating .fa-star').each(function() {
+            var starValue = $(this).data('value');
+            if (starValue <= rating) {
+                $(this).addClass('checked');
+            } else {
+                $(this).removeClass('checked');
+            }
+        });
+    });
+
+    // Submit button click event
+    $(".button-56").on("click", function(e) {
+        e.preventDefault();  // Prevent default form submission
+
+        var cmt = document.getElementById("cmt").value;  // Get comment value
+
+        $.ajax({
+            url: "{% url 'rated' prod.token %}",  // Correctly format the URL
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",  // CSRF token
+                stars: rating,  // Rating value
+                cmt: cmt  // Comment value
+            },
+            success: function(response) {
+                location.reload();  // Refresh the page on success
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: " + error);  // Log any errors
+            }
+        });
+    });
+});
+
+</script>
 
 
 

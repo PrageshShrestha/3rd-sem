@@ -80,10 +80,11 @@ class product_models(models.Model):
     price_range = models.CharField(null = True , max_length = 20)
     category = models.CharField(max_length = 200)
     sub_category = models.CharField(max_length = 200)
+    item_named = models.CharField(max_length = 200)
     weight = models.IntegerField(null=True)
     size = models.CharField(max_length = 100)
     negotiable = models.BooleanField()
-    images = models.ImageField(upload_to = 'static/' , null = True , default="staic/images/product.jpg")
+    images = models.ImageField(upload_to = 'static/' , null = True)
    # varients = models.Foreignkey()#list of productid
     #comments = models. list of comment id 
 class ratings(models.Model):
@@ -173,4 +174,8 @@ class bookmarked(models.Model):
     
     user = models.ForeignKey(user_model , on_delete = models.CASCADE)
     product = models.ForeignKey(product_models , on_delete = models.CASCADE)
-    
+class food_cate(models.Model):
+    category_first = models.CharField(max_length = 20 , default ="Food")
+    sub_cate = models.CharField(max_length = 20)
+    item = models.CharField(max_length = 20)
+    name = models.CharField(max_length = 20)

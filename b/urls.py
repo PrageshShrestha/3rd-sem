@@ -38,4 +38,5 @@ urlpatterns = [
    path("product/<str:id>" , views.product_page , name="product"),
    path("edit_busi_prod/<str:id>" , views.edit_busi_prod , name="edits"),
    path("del_busi_prod/<str:id>" , views.delete_busi_prod , name = "delete"),
+   path("rated/<str:id>" , views.rated , name="rated"),
 ]

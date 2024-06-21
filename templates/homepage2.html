@@ -32,7 +32,7 @@
       width: 16vw;
      
       padding: 15px;
-      background-color: #181818;
+      background-color: none;
       border-radius: 6px;
       cursor: pointer;
       transition: all ease 0.4s;
@@ -43,7 +43,7 @@
     .spotify-playlists .list .item img {
       width: 16vw;
 	  height:30vh;
-      border-radius: 6px;
+      border-radius: 16px;
       margin-bottom: 10px;
 	  overflow:hidden;
     }
@@ -289,8 +289,9 @@ document.addEventListener("DOMContentLoaded", function() {
           <div class="play">
            
           </div>
-          <p>{{i.category}}</p>
-          <p>{{i.product_name}}</p>
+		  <p>{{i.product_name}}</p>
+          <p>{{i.ratings_prod}} <i class="fa-regular fa-star"></i></p>
+          
         </div>
 	{% endfor %}
 	</div>
@@ -308,7 +309,7 @@ document.addEventListener("DOMContentLoaded", function() {
           <div class="play">
            
           </div>
-          <p>{{i.views}} views</p>
+          <p>{{i.views}} <i class="fa-regular fa-eye" style="color:grey;margin-left:0vw;"></i></p>
           <p>{{i.product_name}}</p>
         </div>
 	{% endfor %}

@@ -48,8 +48,8 @@ margin-top:5vh;
 text-decoration:none;
 }
 .busi{
-width:20vw;
-height:40vh;
+width:15vw;
+height:60vh;
 background:rgba(255,255,255,0.05);
 border-radius:10px;
 padding:15px;
@@ -59,7 +59,7 @@ margin-top:5vh;
 text-decoration:none;
 }
 img{
-width:10vw;
+width:15vw;
 height:30vh;
 
 }
@@ -75,7 +75,7 @@ font-size:1rem;
 margin-top:2vh;
 }
 .div_sec{
-width:15vw;
+width:25vw;
 height:30vh;
 padding:10px;
 }
@@ -87,23 +87,34 @@ display:block;
 .tit_sec{
 font-size:1.2rem;
 letter-spacing:2px;
-margin-bottom:4vh;
+margin-bottom:2vh;
 }
 .cate_sec{
 letter-spacing:2px;
-margin-bottom:6vh;
+margin-bottom:3vh;
 }
 .rate_sec{
-letter-spacing:3px;
+letter-spacing:2px;
 
 }
 .pri_sec{
-font-size:2rem;
+font-size:1.5rem;
+color:orange;
 }
 .busi_sec{
 margin-top:3vh;
 color:grey;
 font-size:0.7rem;
+}
+.container_busi{
+position:fixed;
+width:30vw;
+height:80vh;
+overflow:hidden;
+overflow-y:auto;
+padding:0;
+left:74vw;
+top:12vh;
 }
 </style>
 <div class="mainbody">
@@ -132,68 +143,131 @@ container_prod.innerHTML = "";
     var lengthed = response.prod.length;
 	var leng = response.busi.length;
     var container_prod = document.getElementsByClassName("container_mb")[0];
+	var container_busi = document.getElementsByClassName("container_busi")[0];
 	console.log(response , lengthed);
-    for (var i = 0; i < lengthed; i++) {
-        // Extract product details
-        var token = response.prod[i][0];
-        var productName = response.prod[i][1];
-        var views = response.prod[i][2];
-        var imageUrl = response.prod[i][3];
+   for (var i = 0; i < lengthed; i++) {
+    // Extract product details
+    var token = response.prod[i][0];
+    var productName = response.prod[i][1];
+    var views = response.prod[i][2];
+    var imageUrl = response.prod[i][3];
+    var category = response.prod[i][4];
+    var rate = response.prod[i][5];
+    var price = response.prod[i][6];
+    var business = response.prod[i][7];
 
-        // Create a new 'a' element
-        var aTag = document.createElement('a');
-        aTag.className = 'prod';
-        aTag.href = '#';  // Update this if you have a URL to link to
+    // Create a new 'a' element
+    var aTag = document.createElement('a');
+    aTag.className = 'prod';
+     aTag.href = '{% url "product" "' + token + '" %}';   // Update this if you have a URL to link to
 
-        // Create a new 'img' element
-        var imgTag = document.createElement('img');
-        imgTag.src = imageUrl;
-        imgTag.alt = productName;  // Optional: Adding alt text
+    // Create a new 'img' element
+    var imgTag = document.createElement('img');
+    imgTag.src = imageUrl;
+    imgTag.alt = productName;  // Optional: Adding alt text
 
-        // Create a new 'p' element
-        var pTag = document.createElement('p');
-		pTag.className = "p_prod";
-        pTag.textContent = productName;
-		
+    // Create a new 'div' element for the details
+    var divTag = document.createElement('div');
+    divTag.className = 'div_sec';
 
-        // Append 'img' and 'p' to the 'a' element
-        aTag.appendChild(imgTag);
-        
-		
-aTag.appendChild(pTag);
+    // Create new 'p' elements for product details and append to 'div'
+    var titleTag = document.createElement('p');
+    titleTag.className = 'tit_sec';
+    titleTag.textContent = productName;
+    divTag.appendChild(titleTag);
 
-        // Append 'a' to the container
-        container_prod.appendChild(aTag);
-    };
+    var categoryTag = document.createElement('p');
+    categoryTag.className = 'cate_sec';
+    categoryTag.textContent = category;
+    divTag.appendChild(categoryTag);
+
+   var rateTag = document.createElement('p');
+rateTag.className = 'rate_sec';
+rateTag.innerHTML = rate + " <i class='fa fa-star' style='color:orange;'></i> rated by 1000 user";
+divTag.appendChild(rateTag);
+
+
+    var businessTag = document.createElement('p');
+    businessTag.className = 'busi_sec';
+    businessTag.textContent = "From " + business;
+    divTag.appendChild(businessTag);
+
+    // Create a new 'section' element for the price
+    var sectionTag = document.createElement('section');
+    sectionTag.className = 'price_sec';
+
+    var priceTag = document.createElement('p');
+    priceTag.className = 'pri_sec';
+    priceTag.textContent = "Rs." + price;
+    sectionTag.appendChild(priceTag);
+
+    // Append 'img', 'div', and 'section' to the 'a' element
+    aTag.appendChild(imgTag);
+    aTag.appendChild(divTag);
+    aTag.appendChild(sectionTag);
+
+    // Append 'a' to the container
+    container_prod.appendChild(aTag);
+}
+
 	 for (var i = 0; i < leng; i++) {
-        // Extract product details
-        var token = response.busi[i][0];
-        var productName = response.busi[i][1];
-        var views = response.busi[i][2];
-        var imageUrl = response.busi[i][3];
+    // Extract product details
+    var token = response.busi[i][0];
+    var productName = response.busi[i][1];
+    var views = response.busi[i][2];
+    var imageUrl = response.busi[i][3];
+    var category = response.busi[i][4];
+    var since = response.busi[i][5];
+    var lp = response.busi[i][6];
 
-        // Create a new 'a' element
-        var aTag = document.createElement('a');
-        aTag.className = 'busi';
-        aTag.href = '#';  // Update this if you have a URL to link to
+    // Create a new 'a' element
+    var aTag = document.createElement('a');
+    aTag.className = 'busi';
+    aTag.href = '{% url "business_profile" "' + token + '" %}';  // Update this if you have a URL to link to
 
-        // Create a new 'img' element
-        var imgTag = document.createElement('img');
-        imgTag.src = imageUrl;
-        imgTag.alt = productName;  // Optional: Adding alt text
+    // Create a new 'img' element
+    var imgTag = document.createElement('img');
+    imgTag.src = imageUrl;
+    imgTag.alt = productName;  // Optional: Adding alt text
 
-        // Create a new 'p' element
-        var pTag = document.createElement('p');
-		pTag.className = "p_prod"
-        pTag.textContent = productName;
+    // Create a new 'div' element for the details
+    var divTag = document.createElement('div');
+    divTag.className = 'div_sec';
 
-        // Append 'img' and 'p' to the 'a' element
-        aTag.appendChild(imgTag);
-        aTag.appendChild(pTag);
+    // Create new 'p' elements for product details and append to 'div'
+    var titleTag = document.createElement('p');
+    titleTag.className = 'tit_sec';
+    titleTag.textContent = productName;
+    divTag.appendChild(titleTag);
 
-        // Append 'a' to the container
-        container_prod.appendChild(aTag);
-    }
+    var categoryTag = document.createElement('p');
+    categoryTag.className = 'cate_sec';
+    categoryTag.textContent = category;
+    divTag.appendChild(categoryTag);
+
+    var sinceTag = document.createElement('p');
+    sinceTag.className = 'cate1_sec';
+    sinceTag.innerHTML= "since " + since ;
+    divTag.appendChild(sinceTag);
+
+    var rateTag = document.createElement('p');
+    rateTag.className = 'rate_sec';
+    rateTag.innerHTML= views +" <i class='fa fa-star' style='color:orange;'></i> ratings";
+    divTag.appendChild(rateTag);
+
+    var lpTag = document.createElement('p');
+    lpTag.className = 'busi_sec';
+    lpTag.textContent =  lp +" Listed products ";
+    divTag.appendChild(lpTag);
+
+    // Append 'img' and 'div' to the 'a' element
+    aTag.appendChild(imgTag);
+    aTag.appendChild(divTag);
+
+    // Append 'a' to the container
+    container_busi.appendChild(aTag);
+}
+
 	
 },
 
@@ -210,28 +284,17 @@ aTag.appendChild(pTag);
 <p style="font-size:1.4rem;">Top Results</p>
 <br>
 <div class="container_mb">
-<a class="prod">
 
-<img src="">
-<div class="div_sec">
-<p class="tit_sec">Title</p>
-<p class="cate_sec">Category</p>
 
-<p class="rate_sec">Ratings</p>
-<p class="busi_sec">From Business</p>
-</div>
-
-<section class="price_sec">
-<p class="pri_sec">Price</p>
-
-</section>
-
-</a>
 
 
 </div>
 
+<div class="container_busi">
+<p style="color:orange;font-size:1.2rem;margin-top:2vh;">Related Stores / Business</p>
 
+
+</div>
 
 
 

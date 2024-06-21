@@ -203,7 +203,7 @@
         justify-content: space-between;
     }
 
-    #menu_type p {
+    #menu_type a {
 
         text-decoration: none;
         
@@ -217,7 +217,7 @@
 		border:2px inset white;
     }
 
-    #menu_type p:hover {
+    #menu_type a:hover {
         transform: scale(1.05);
 
     }
@@ -453,7 +453,7 @@ width:96%;
         <div class="ac a">
             <div class="img_class">
 
-                <img src="" alt="no found">
+                <img src="{{business.img.url}}" alt="not found">
 
             </div>
 
@@ -508,11 +508,11 @@ width:96%;
                         </div>
                         <div class="info_ele">
                             <p class="key">Joined</p>
-                            <p class="value">2015</p>
+                            <p class="value">{{business.dob}}</p>
                         </div>
                         <div class="info_ele">
                             <p class="key">Owner</p>
-                            <p class="value">Saurav Bhujel</p>
+                            <p class="value">{{business.owner}}</p>
                         </div>
 
 
@@ -526,20 +526,20 @@ width:96%;
         <div class="ac b">
 
             <div class="acb a">
-                <p class="value1">70</p>
+                <p class="value1">{{l}}</p>
                 <p class="key1">Listed products</p>
 
 
             </div>
             <div class="acb b">
 
-                <p class="value1">1000</p>
+                <p class="value1">{{business.reviews}}</p>
                 <p class="key1">Total likes</p>
 
             </div>
             <div class="acb c">
 
-                <p class="value1">108</p>
+                <p class="value1">{{cl}}</p>
                 <p class="key1">Comments</p>
 
             </div>
@@ -558,7 +558,7 @@ width:96%;
             <div id="menu_type">
 
 {% for i in products %}
-<p>{{i.product_name}}</p>
+<a href="{% url 'product' i.token %}">{{i.product_name}}</a>
 {% endfor %}
 
 
@@ -768,7 +768,7 @@ width:96%;
 
         // A variable to track whether the `edit` element is currently visible
         var isEditVisible = false;
-
+{% if b %}
         // Add a click event listener to the `menu_editor` element
         menu_editor.addEventListener("click", function (event) {
             // Stop the event from propagating to the body event listener
@@ -782,6 +782,7 @@ width:96%;
             // Set the `isEditVisible` flag to true
             isEditVisible = true;
         });
+               {% endif %}
 
         // Add a click event listener to the `body` element
         body.addEventListener("click", function () {

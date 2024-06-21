@@ -221,7 +221,7 @@ def Email(request , receiver,extra_var):
 
         body = f"Hello User,\n\nYou have requested to change your Email or Phone number to ours. If you did not initiate this change, please treat this email with report to Google or to our team in given Email below .\n\nTo ensure your account's security, we have sent you a One-Time Password (OTP). Please use the following OTP to verify your request:\n\nOTP: {number}\n\nIf you did not make this request or believe it's an unauthorized action, please contact our support team immediately or report this issue at binormus007@gmail.com.\n\nThank you for your attention to this matter.\n\nBest Regards,\nSBGS"
 
-        request.session['otp'] = number
+        request.session['number'] = number
         em.set_content(body)
         context= ssl.create_default_context()
         
@@ -275,7 +275,7 @@ def otp(request , email_receiver):
         em = 1
     context = {
     "email":email_receiver , 
-    "otp":request.session["otp"],
+    "otp":request.session["number"],
     "password_received":password,
     "email_received":email,
     "ps":ps,
@@ -401,6 +401,7 @@ def homepage(request):
     best_rated=product_models.objects.all().order_by("-ratings_prod")[:4]
     most_viewed_products = product_models.objects.all().order_by("-views")[:4]
     ppr = product_models.objects.filter(category = "Games and Sports")
+    food_db = product_models.objects.filter(category = "food").order_by("-views")
     if "business_token" in request.session:
         request.session["b/u"] = 1
     for i in category_db:
@@ -828,24 +829,30 @@ def login(request):
             return business_page(request,username)
     return render(request , "login.html")        
 def business_page(request,token):
+    
     if "business_token" in request.session:
         token = request.session["business_token"]
         prod_busi = business_model.objects.get(token = token)
         products = product_models.objects.filter(business_mdl = prod_busi)
+        cmts = comments.objects.filter(business = prod_busi)
         leng = len(products)
+        leng_cmts = len(cmts)
         context = {
         "business":business_model.objects.get(token = token),
         "b":1,
         "products":products,
         "l":leng,
+        "cl":leng_cmts,
         }
         return render(request,"business_page.html",context)
     elif business_model.objects.filter(token=token):
         prod_busi = business_model.objects.get(token = token)
         products = product_models.objects.filter(business_mdl = prod_busi)
         leng = len(products)
+        cmts = comments.objects.filter(business = prod_busi)
+        leng_cmts = len(cmts)
         context = {
-        
+        "cl":leng_cmts,
         "business":business_model.objects.get(token = token),
         "products":products,
         "l":leng,
@@ -1111,7 +1118,7 @@ def recommended_ones(request , category):
 def searchbar(request):
     data = "empty"
     list_made = word_list_giver(request)
-    
+   
     business_id = []
     product_id = []
     if "user_number" in request.session:
@@ -1144,7 +1151,9 @@ def searchbar(request):
         for j in business_id:
             try:
                 businessed = business_model.objects.get(token=j)
-                listed_busid = [businessed.token , businessed.name , businessed.avg_rating , businessed.img.url]
+                busi_prod = product_models.objects.filter(business_mdl = businessed).count()
+                
+                listed_busid = [businessed.token , businessed.name , businessed.avg_rating , businessed.img.url ,businessed.category , businessed.dob,busi_prod]
                 if not any(businessed.token == listed_busi[0] for listed_busi in business_id):
                     business_idu.append(listed_busid)
             except business_model.DoesNotExist:
@@ -1152,7 +1161,7 @@ def searchbar(request):
         for k in product_id:
             try:
                 producted = product_models.objects.get(token = k)
-                listed_prod = [producted.token , producted.product_name , producted.views , producted.picture.url]
+                listed_prod = [producted.token , producted.product_name , producted.views , producted.picture.url , producted.category , producted.ratings_prod , producted.price , producted.business_mdl.name]
                 if not any(producted.token == product[0] for product in product_id):
                     product_idu.append(listed_prod)
             except product_models.DoesNotExist:
@@ -1232,6 +1241,7 @@ def most_milne_2(word , word_list):
         total = 0 
     sorted_list = sorted(data1, key=lambda x: x[1], reverse=True) 
     
+
     return sorted_list[0]     
             
 def string_taker(query_string , list_made):
@@ -1382,7 +1392,7 @@ def ci(request):
             print(13)
             request.session["new_email"] = email 
             number = random.randint(4567 , 9999)
-            request.session["otp"] = number 
+            request.session["number"] = number 
             extra_var = "none"
             Email(request , email , extra_var)
             return JsonResponse({"email":email} , safe = False)
@@ -1391,7 +1401,7 @@ def ci(request):
             print(23)
             request.session["new_password"] = password 
             number = random.randint(4567 , 9999)
-            request.session["otp"] = number 
+            request.session["number"] = number 
             extra_var = "none"
             Email(request , email , extra_var)
             return JsonResponse({"email":email} , safe = False)
@@ -1443,11 +1453,23 @@ def product_list(request):
         
 def comments_page(request):
     if "business_token" in request.session:
-        business_got = business_model.objects.get(token = request.session["business_token"])
-        commented = comments.objects.filter(business_mdl = business_got)
-        context={
-        "cmts":commented,
+        business_got = business_model.objects.get(token=request.session["business_token"])
+        products = product_models.objects.filter(business_mdl=business_got)
         
+        cmts = []
+        rated = []
+        
+        for product in products:
+            rate = ratings.objects.filter(product_id=product)
+            for i in rate:
+                rated.append((product.product_name , (i.user.name ,i.ratings)) )
+            cmted = comments.objects.filter(product_id=product)
+            for i in cmted:
+                cmts.append((product.product_name , (i.user.name , i.comment)))
+
+        context = {
+            "cmts": cmts,
+            "rated": rated,
         }
         return render(request, "comments.html" ,context)
     else:
@@ -1469,8 +1491,8 @@ def product_page(request, id):
         
         prod = product_models.objects.get(token = id)
         variants = variant_finder(id)
-        cmted = 0
-        
+        cmted = -1
+        prod.views +=1
         comment = comments.objects.filter(product_id = prod)
         related_product_finders = rpf(id)
         if "user_number" in request.session:
@@ -1479,9 +1501,9 @@ def product_page(request, id):
             cmted = 0
             try:
                 if comments.objects.filter(user = user , product_id = prod):
-                    cmted = 1
+                    cmted = 0
             except comments.DoesNotExist:
-                cmted = 0
+                cmted = 1
             
         
             
@@ -1498,6 +1520,7 @@ def product_page(request, id):
                 }
         else:
             context = {
+            
             "cmted":cmted,
             "comments":comment,
             "logged":0,
@@ -1521,3 +1544,18 @@ def delete_busi_prod(request , id):
       
     else:
         return error_display(request)
+def rated(request , id):
+    if "user_number" in request.session:
+        r = request.POST 
+        star = r.get("stars")
+        cmt = r.get("comments")
+        user = user_model.objects.get(token = request.session["user_number"])
+        
+        product = product_models.objects.get(token = id)
+        busi = product.business_mdl
+        ratings.objects.create(user = user , product_id = product , ratings = star)
+        cmt_token =product.token[6:10]+user.token[1:3]+random.randint(4000000,80000000) 
+        if cmt != "":
+            comments.objects.create(comment_token =cmt_token ,user = user , product_id = product_id , comment = cmt , business = busi)
+            
+            
