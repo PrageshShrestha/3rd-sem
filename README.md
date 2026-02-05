@@ -15,7 +15,7 @@ It serves as a personal archive of coursework, code implementations, and study m
 
 
 
-## 📑 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Repository Structure](#repository-structure)
@@ -99,6 +99,6 @@ cd 3rd-sem
 
 ```
 
-👤 Author
+ Author
 Pragesh Shrestha
 GitHub: [https://github.com/PrageshShrestha](https://github.com/PrageshShrestha)
